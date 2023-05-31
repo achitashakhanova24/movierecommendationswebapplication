@@ -70,6 +70,29 @@ public class JdbcAccountDao implements AccountDao{
     }
 
     @Override
+    public Account getAccountByUsername(String username) {
+        String sql = "SELECT * FROM accounts " +
+                "JOIN users ON users.user_id = accounts.user_id " +
+                "WHERE users.username = ?;";
+        try {
+            SqlRowSet rowset = jdbcTemplate.queryForRowSet(sql, username);
+            if(rowset.next()) {
+                return mapRowToAccount(rowset);
+            }
+            else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+        }
+        catch(CannotGetJdbcConnectionException e) {
+            throw new CannotGetJdbcConnectionException("Could not connect to data source");
+        } catch(BadSqlGrammarException e) {
+            throw new BadSqlGrammarException(e.getMessage(), sql, e.getSQLException());
+        } catch(DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("Invalid operation - Data integrity error");
+        }
+    }
+
+    @Override
     public Account updateAccount(int accountId, String email, List<String> favorites) {
         String sql = "UPDATE accounts SET email = ?, favorites = ? WHERE account_id = ?";
         try {

@@ -12,14 +12,14 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping(path = "/account")
-@PreAuthorize("")
+@PreAuthorize("isAuthenticated()")
 public class AccountController {
     private AccountDao dao;
 
     public AccountController(AccountDao dao) {this.dao = dao;}
 
     @GetMapping
-    public Account getAccountInfo(@RequestParam int userId){
-        return dao.getAccountByUserId(userId);
+    public Account getAccountInfo(Principal principal){
+        return dao.getAccountByUsername(principal.getName());
     }
 }
