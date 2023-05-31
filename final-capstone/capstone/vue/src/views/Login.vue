@@ -1,3 +1,4 @@
+Login.vue :
 <template>
   <div id="login">
     <form @submit.prevent="login">
@@ -21,15 +22,18 @@
       Need an account?<router-link class="register-link" :to="{ name: 'register' }"> Sign up now</router-link></p>
     </form>
     <div class="about">
-      <p>This is placeholder text for this paragraph because I'm too tired to be wordy rn</p>
-      
+      <p>Picture this: You've swiped on countless potential "soulmates" on Tinder, but what
+       if there was an app that matched you with your perfect movie instead? Are you tired of
+       endlessly scrolling through movie recommendations that don't quite hit the mark? Look no further!
+       CinemaCrush is here to ignite your cinematic journey with a unique twist! At CinemaCrush, we believe in
+       the power of connection and the thrill of discovering your perfect movie match. With our innovative "yes" or
+       "no" swiping feature, you'll embark on a thrilling adventure, exploring a vast array of films tailored to your preferences.
+       Say goodbye to wasting time on movies that don't resonate with you and embrace the excitement of finding your cinematic soulmate.</p>
     </div>
   </div>
 </template>
-
 <script>
 import authService from "../services/AuthService";
-
 export default {
   name: "login",
   components: {},
@@ -55,7 +59,6 @@ export default {
         })
         .catch(error => {
           const response = error.response;
-
           if (response.status === 401) {
             this.invalidCredentials = true;
           }
@@ -64,7 +67,6 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 .form-input-group {
   margin-bottom: 1rem;
@@ -106,43 +108,37 @@ button {
   color: rgb(245,245,245);
   font-size: 1.5em;
   width: 100vw;
-  height: 10rem;
+  height: 13rem;
   background-color: rgba(0, 0, 0, 0.9);
 }
-
 .about > p {
   color: whitesmoke;
   text-align: center;
 }
-
 input {
   border-radius: 5px;
-  background-color: #b1b1b1;
+  background-color: #B1B1B1;
   height: 3rem;
   width: 15rem;
   color: #000;
   font-family: 'Heebo', sans-serif;
 }
-
 h1 {
   color: whitesmoke;
 }
 label {
   color: whitesmoke;
 }
-
 .register-link {
   text-decoration: none;
   color: whitesmoke;
 }
-
 p {
   color: #696969;
 }
 .alert{
   color: tomato;
 }
-
 ::placeholder {
   color: rgba(32, 32, 32, 0.774);
   font-family: 'Paytone One', sans-serif;
@@ -151,11 +147,9 @@ p {
   position: absolute;
   left: 5;
 }
-
 input:not(:placeholder-shown) {
   background-color: #F5F5F5;
 }
-
 button:hover {
   background-color: firebrick;
 }

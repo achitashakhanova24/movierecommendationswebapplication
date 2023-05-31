@@ -22,10 +22,8 @@
     </form>
   </div>
 </template>
-
 <script>
 import authService from '../services/AuthService';
-
 export default {
   name: 'register',
   data() {
@@ -72,12 +70,83 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .form-input-group {
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 label {
   margin-right: 0.5rem;
+}
+#register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.9);
+  width: 30rem;
+  height: 35rem;
+  /* text-align: center; */
+  border-radius: 7px;
+}
+button {
+  font-family: 'Paytone One', sans-serif;
+  width: 15rem;
+  height: 3rem;
+  border-radius: 5px;
+  background-color: red;
+  color: whitesmoke;
+  font-size: 1.25rem;
+}
+#login {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.about {
+  margin-top: 50px;
+  color: rgb(245,245,245);
+  font-size: 1.5em;
+  width: 100vw;
+  height: 13rem;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+.about > p {
+  color: whitesmoke;
+  text-align: center;
+}
+input {
+  border-radius: 5px;
+  background-color: #B1B1B1;
+  height: 3rem;
+  width: 15rem;
+  color: #000;
+  font-family: 'Heebo', sans-serif;
+}
+h1 {
+  color: whitesmoke;
+}
+label {
+  color: whitesmoke;
+}
+.register-link {
+  text-decoration: none;
+  color: whitesmoke;
+}
+p {
+  color: #696969;
+}
+.alert{
+  color: tomato;
 }
 </style>
