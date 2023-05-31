@@ -21,7 +21,14 @@
       Need an account?<router-link class="register-link" :to="{ name: 'register' }"> Sign up now</router-link></p>
     </form>
     <div class="about">
-      <p>This is placeholder text for this paragraph because I'm too tired to be wordy rn</p>
+      
+      <!-- <p>Picture this: You've swiped on countless potential "soulmates" on Tinder, but what 
+       if there was an app that matched you with your perfect movie instead? Are you tired of 
+       endlessly scrolling through movie recommendations that don't quite hit the mark? Look no further! 
+       CinemaCrush is here to ignite your cinematic journey with a unique twist! At CinemaCrush, we believe in 
+       the power of connection and the thrill of discovering your perfect movie match. With our innovative "yes" or 
+       "no" swiping feature, you'll embark on a thrilling adventure, exploring a vast array of films tailored to your preferences. 
+       Say goodbye to wasting time on movies that don't resonate with you and embrace the excitement of finding your cinematic soulmate.</p> -->
       
     </div>
   </div>
@@ -106,7 +113,7 @@ button {
   color: rgb(245,245,245);
   font-size: 1.5em;
   width: 100vw;
-  height: 10rem;
+  height: 13rem;
   background-color: rgba(0, 0, 0, 0.9);
 }
 
