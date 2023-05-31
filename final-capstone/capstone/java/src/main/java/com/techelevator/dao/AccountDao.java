@@ -1,6 +1,7 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.Account;
+import com.techelevator.model.AccountDto;
 
 import java.util.List;
 
@@ -9,5 +10,5 @@ public interface AccountDao {
     Account getAccountByUserId(int userId);
     Account getAccountByAccountId(int accountId);
     Account getAccountByUsername(String username);
-    Account updateAccount(int accountId, String email, List<String> favorites);
+    Account updateAccount(AccountDto accountDto, String username);
 }

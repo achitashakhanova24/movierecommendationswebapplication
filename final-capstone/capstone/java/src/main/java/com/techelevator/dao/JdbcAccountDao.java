@@ -1,6 +1,7 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.Account;
+import com.techelevator.model.AccountDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -93,12 +94,14 @@ public class JdbcAccountDao implements AccountDao{
     }
 
     @Override
-    public Account updateAccount(int accountId, String email, List<String> favorites) {
-        String sql = "UPDATE accounts SET email = ?, favorites = ? WHERE account_id = ?";
+    public Account updateAccount(AccountDto accountDto, String username) {
+        String sql = "UPDATE accounts SET email = ?, favorites = ? " +
+                "FROM users " +
+                "WHERE users.user_id = accounts.user_id AND users.username = ?";
         try {
-            jdbcTemplate.update(sql, email, String.join(",", favorites), accountId);
+            jdbcTemplate.update(sql, accountDto.getEmail(),accountDto.getFavorites().toArray(new String [accountDto.getFavorites().size()]), username);
 
-            return getAccountByAccountId(accountId);
+            return getAccountByUsername(username);
         }
         catch(CannotGetJdbcConnectionException e) {
             throw new CannotGetJdbcConnectionException("Could not connect to data source");
@@ -110,8 +113,11 @@ public class JdbcAccountDao implements AccountDao{
     }
 
     private Account mapRowToAccount(SqlRowSet rowSet) {
-        String[] favs = rowSet.getString("favorites").split(",");
-        List<String> favsList = Arrays.asList(favs);
-        return new Account(rowSet.getInt("account_id"), rowSet.getInt("user_id"), favsList, rowSet.getString("email"));
+        /*String[] favs = rowSet.getString("favorites").split(",");
+        List<String> favsList = Arrays.asList(favs);*/
+        Object favsArray = rowSet.getObject("favorites");
+        String[] objectArr = (String[])favsArray;
+        return new Account(rowSet.getInt("account_id"), rowSet.getInt("user_id"), Arrays.asList(objectArr), rowSet.getString("email"));
+
     }
 }

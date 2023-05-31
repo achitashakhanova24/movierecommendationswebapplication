@@ -2,12 +2,11 @@ package com.techelevator.controller;
 
 import com.techelevator.dao.AccountDao;
 import com.techelevator.model.Account;
+import com.techelevator.model.AccountDto;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
@@ -21,5 +20,10 @@ public class AccountController {
     @GetMapping
     public Account getAccountInfo(Principal principal){
         return dao.getAccountByUsername(principal.getName());
+    }
+
+    @PutMapping
+    public Account updateAccountInfo(@Valid @RequestBody AccountDto accountDto, Principal principal){
+        return dao.updateAccount(accountDto, principal.getName());
     }
 }
