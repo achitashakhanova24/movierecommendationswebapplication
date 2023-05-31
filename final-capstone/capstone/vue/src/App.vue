@@ -1,45 +1,57 @@
 <template>
   <div id="app">
+    <head>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@600&family=Lobster&family=Paytone+One&display=swap" rel="stylesheet">
+    </head>
     <div id="nav">
-      <router-link v-bind:to="{ name: 'home' }">Home</router-link>&nbsp;|&nbsp;
+      <router-link id="home-link" v-bind:to="{ name: 'home' }">Home</router-link>&nbsp;|&nbsp;
       <router-link v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
-
     </div>
     <router-view />
     <footer>
-        © COPYRIGHT 2023 - CinemaCrush.com
+      Copyright 2023
     </footer>
   </div>
 </template>
 
-<style scoped>
-  #app{
-    background-image: url('../images/Posters.jpg');
-    background-size: cover;
-    display: grid;
-    grid-template-areas: 
-    "nav"
-    "router"
-    'footer';
+<style>
+  html {
+    background-image: url('../images/poster.jpg');
+    background-size: 100%;
+    font-family: 'Paytone One', sans-serif;
   }
 
-  #nav{
-    grid-area: 'nav';
+  #nav {
+    background-color: rgba(0, 0, 0, 0.9);
+    height: 2.5rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    font-size: 2em;
   }
 
-  router-view{
-    grid-area: 'router';
+  footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1.5rem;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: whitesmoke;
   }
 
-  footer{
-    grid-area: 'footer';
+  router-view {
+    background-color: rgba(112, 128, 144, .8);
   }
 
-  footer{
-    text-align: center;
-    margin-top: 65vh;
-    
+  #home-link {
+    text-decoration: none;
+    color: rgb(245,245,245);
   }
-  
-
+  #home-link:hover {
+    color: rgba(245, 245, 245, 0.788);
+  }
 </style>

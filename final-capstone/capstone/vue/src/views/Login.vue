@@ -1,43 +1,29 @@
 <template>
   <div id="login">
-    <form @submit.prevent="login" class="form-container">
-      <h1 >Please Sign In</h1>
-      <div role="alert" v-if="invalidCredentials">
+    <form @submit.prevent="login">
+      <h1 >Sign In</h1>
+      <div class="alert" role="alert" v-if="invalidCredentials">
         Invalid username and password!
       </div>
-      <div role="alert" v-if="this.$route.query.registration">
+      <div class="alert" role="alert" v-if="this.$route.query.registration">
         Thank you for registering, please sign in.
       </div>
       <div class="form-input-group">
         <label for="username">Username</label>
-        <input type="text" id="username" v-model="user.username" required autofocus />
+        <input placeholder="Enter your username here" type="text" id="username" v-model="user.username" required autofocus />
       </div>
       <div class="form-input-group">
         <label for="password">Password</label>
-        <input type="password" id="password" v-model="user.password" required />
+        <input placeholder="Enter your password here" type="password" id="password" v-model="user.password" required />
       </div>
-      <div class="button-container">
-      <button type="submit">About Us</button>
-      <router-link :to='{ name: "register" }'>
-        <button type="submit">Register</button>
-      </router-link>
-      
-      <button type="submit">Login</button>
-      </div>
-
-    </form>
-    <div class='about-us'>
+      <button type="submit">Sign in</button>
       <p>
-       Picture this: You've swiped on countless potential "soulmates" on Tinder, but what 
-       if there was an app that matched you with your perfect movie instead? Are you tired of 
-       endlessly scrolling through movie recommendations that don't quite hit the mark? Look no further! 
-       CinemaCrush is here to ignite your cinematic journey with a unique twist! At CinemaCrush, we believe in 
-       the power of connection and the thrill of discovering your perfect movie match. With our innovative "yes" or 
-       "no" swiping feature, you'll embark on a thrilling adventure, exploring a vast array of films tailored to your preferences. 
-       Say goodbye to wasting time on movies that don't resonate with you and embrace the excitement of finding your cinematic soulmate.
-      </p>
+      Need an account?<router-link class="register-link" :to="{ name: 'register' }"> Sign up now</router-link></p>
+    </form>
+    <div class="about">
+      <p>This is placeholder text for this paragraph because I'm too tired to be wordy rn</p>
+      
     </div>
-    
   </div>
 </template>
 
@@ -82,41 +68,95 @@ export default {
 <style scoped>
 .form-input-group {
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 label {
   margin-right: 0.5rem;
 }
-
-.form-container {
+form {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  background-color: rgba(0, 0, 0, 0.9);
+  width: 30rem;
+  height: 35rem;
+  /* text-align: center; */
+  border-radius: 7px;
 }
-
-.button-container {
+button {
+  font-family: 'Paytone One', sans-serif;
+  width: 15rem;
+  height: 3rem;
+  border-radius: 5px;
+  background-color: red;
+  color: whitesmoke;
+  font-size: 1.25rem;
+}
+#login {
+  margin-top: 100px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 10px;
+  align-items: center;
+}
+.about {
+  margin-top: 50px;
+  color: rgb(245,245,245);
+  font-size: 1.5em;
+  width: 100vw;
+  height: 10rem;
+  background-color: rgba(0, 0, 0, 0.9);
 }
 
-.button-container button {
-  margin: 0 10px;
-}
-footer{
+.about > p {
+  color: whitesmoke;
   text-align: center;
 }
-.about-us{
-  text-align: center;
-  font-weight: bold;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  letter-spacing: 1px;
-  margin-left: 300px;
-  margin-right: 300px;
-  font-size: 25px;
+
+input {
+  border-radius: 5px;
+  background-color: #b1b1b1;
+  height: 3rem;
+  width: 15rem;
+  color: #000;
+  font-family: 'Heebo', sans-serif;
+}
+
+h1 {
+  color: whitesmoke;
+}
+label {
+  color: whitesmoke;
+}
+
+.register-link {
+  text-decoration: none;
+  color: whitesmoke;
+}
+
+p {
+  color: #696969;
+}
+.alert{
+  color: tomato;
+}
+
+::placeholder {
+  color: rgba(32, 32, 32, 0.774);
+  font-family: 'Paytone One', sans-serif;
+  font-size: .7rem;
+  font-style: italic;
+  position: absolute;
+  left: 5;
+}
+
+input:not(:placeholder-shown) {
+  background-color: #F5F5F5;
+}
+
+button:hover {
+  background-color: firebrick;
 }
 </style>
