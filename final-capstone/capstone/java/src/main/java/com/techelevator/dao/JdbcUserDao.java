@@ -50,7 +50,7 @@ public class JdbcUserDao implements UserDao {
     @Override
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
-        String sql = "select * from users";
+        String sql = "SELECT * FROM users";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
         while (results.next()) {
@@ -75,11 +75,14 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public boolean create(String username, String password, String role) {
-        String insertUserSql = "insert into users (username,password_hash,role) values (?,?,?)";
+        String insertUserSql = "insert into users (username,password_hash,role) values (?,?,?) RETURNING user_id";
+        String insertAccountSql = "INSERT INTO accounts(favs, email, user_id) VALUES ('', '', ?);";
         String password_hash = new BCryptPasswordEncoder().encode(password);
         String ssRole = role.toUpperCase().startsWith("ROLE_") ? role.toUpperCase() : "ROLE_" + role.toUpperCase();
 
-        return jdbcTemplate.update(insertUserSql, username, password_hash, ssRole) == 1;
+        int newUserId = jdbcTemplate.queryForObject(insertUserSql, Integer.class, username, password_hash, ssRole);
+
+        return jdbcTemplate.update(insertAccountSql, newUserId) == 1;
     }
 
     private User mapRowToUser(SqlRowSet rs) {
