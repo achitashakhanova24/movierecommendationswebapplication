@@ -95,11 +95,11 @@ public class JdbcAccountDao implements AccountDao{
 
     @Override
     public Account updateAccount(AccountDto accountDto, String username) {
-        String sql = "UPDATE accounts SET email = ?, favorites = ? " +
+        String sql = "UPDATE accounts SET email = ? " +
                 "FROM users " +
                 "WHERE users.user_id = accounts.user_id AND users.username = ?";
         try {
-            jdbcTemplate.update(sql, accountDto.getEmail(),accountDto.getFavorites().toArray(new String [accountDto.getFavorites().size()]), username);
+            jdbcTemplate.update(sql, accountDto.getEmail(), username);
 
             return getAccountByUsername(username);
         }
@@ -113,11 +113,7 @@ public class JdbcAccountDao implements AccountDao{
     }
 
     private Account mapRowToAccount(SqlRowSet rowSet) {
-        /*String[] favs = rowSet.getString("favorites").split(",");
-        List<String> favsList = Arrays.asList(favs);*/
-        Object favsArray = rowSet.getObject("favorites");
-        String[] objectArr = (String[])favsArray;
-        return new Account(rowSet.getInt("account_id"), rowSet.getInt("user_id"), Arrays.asList(objectArr), rowSet.getString("email"));
+        return new Account(rowSet.getInt("account_id"), rowSet.getInt("user_id"), rowSet.getString("email"));
 
     }
 }
