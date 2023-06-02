@@ -1,4 +1,7 @@
 package com.techelevator.services;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -13,8 +16,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -46,6 +57,7 @@ public class MovieService {
         genreIdToName.put(53,"Thriller");
         genreIdToName.put(10752,"War");
         genreIdToName.put(37,"Western");
+        genreIdToName.put(18, "Drama");
     }
 
     @Value("${MOVIE_API}")
@@ -94,4 +106,111 @@ public class MovieService {
 
         return movie;
     }
+
+    public List<Movie> displayLatestMovies() {
+        List<Movie> movies = new ArrayList<>();
+        String startDate = LocalDate.now().minusDays(10).toString();
+        String endDate = LocalDate.now().plusDays(5).toString();
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode;
+        String releaseYear = String.valueOf(LocalDate.now().getYear());
+        ResponseEntity<String> responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY +
+                "&primary_release_date.gte=" + startDate + "&primary_release_date.lte=" + endDate + "&with_release_type=3|2|1" + "&primary_release_year=" + releaseYear, HttpMethod.GET, entity, String.class);
+        try {
+            jsonNode = mapper.readTree(responseEntity.getBody()).path("results");
+
+
+            for (int i = 0; i < jsonNode.size(); i++) {
+                List<String> genreList = new ArrayList<>();
+                Movie movie = new Movie();
+                movie.setTitle(jsonNode.get(i).path("original_title").asText());
+                movie.setLanguage(jsonNode.get(i).path("original_language").asText());
+                JsonNode array = jsonNode.get(i).path("genre_ids");
+                movie.setRuntime(jsonNode.get(i).path("runtime").asInt());
+                movie.setReleaseDate(new SimpleDateFormat("yyyy-MM-dd").parse(jsonNode.get(i).path("release_date").asText()));
+                movie.setDescription(jsonNode.get(i).path("overview").asText());
+
+                movie.setMovieId(jsonNode.get(i).path("id").asInt());
+                for (int j = 0; j < array.size(); j++) {
+                    int genre = array.get(j).asInt();
+                    genreList.add(genreIdToName.get(genre));
+                }
+                movie.setListOfGenres(genreList);
+                movies.add(movie);
+            }
+
+            return movies;
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return movies;
+    }
+
+    /*public List<Movie> getRandomMovies(int count) {
+        List<Movie> randomMovies = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            // Generate a random movie_id
+            int randomMovieId = generateRandomMovieId();
+
+            String apiKey = "your_api_key";
+            String apiUrl = "https://api.themoviedb.org/3/movie/" + randomMovieId + "?api_key=" + apiKey;
+
+            try {
+                URL url = new URL(apiUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    reader.close();
+
+                    // Parse the JSON response
+                    JSONObject jsonResponse = new JSONObject(response.toString());
+                    Movie movie = parseMovie(jsonResponse);
+                    randomMovies.add(movie);
+                } else {
+                    // Handle error case
+                    // ...
+                }
+            } catch (IOException | JSONException e) {
+                // Handle exception
+                // ...
+            }
+        }
+
+        return randomMovies;
+    }
+
+
+    private int generateRandomMovieId() {
+            // Define the range of movie IDs
+            int minMovieId = 1;
+            int maxMovieId = 10000;
+
+            // Generate a random movie ID within the range
+            int randomMovieId = (int) (Math.random() * (maxMovieId - minMovieId + 1)) + minMovieId;
+
+            return randomMovieId;
+    }
+
+
+    private Movie parseMovie(JSONObject jsonObject) throws JSONException {
+        int id = jsonObject.getInt("id");
+        String title = jsonObject.getString("title");
+        // Parse other movie properties as needed
+
+        return new Movie(id, title);
+    }*/
 }

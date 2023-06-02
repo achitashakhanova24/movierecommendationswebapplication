@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/movie")
 @PreAuthorize("isAuthenticated()")
@@ -26,5 +28,10 @@ public class MovieController {
     @GetMapping
     public Movie getMovie(){
         return movieService.getMovie();
+    }
+
+    @GetMapping("/newReleases")
+    public List<Movie> newReleases(){
+        return movieService.displayLatestMovies();
     }
 }

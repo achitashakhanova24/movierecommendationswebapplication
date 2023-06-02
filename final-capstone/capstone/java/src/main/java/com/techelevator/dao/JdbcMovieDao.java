@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 
 @Component
@@ -22,10 +23,13 @@ public class JdbcMovieDao implements MovieDao{
     @Override
     public Movie getRandomMovie() {
         return null;
+
     }
 
     @Override
     public List<Movie> getFavorites() {
         return null;
     }
+
+
 }
