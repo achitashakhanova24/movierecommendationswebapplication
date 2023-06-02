@@ -13,13 +13,14 @@
     <ul class="menu" v-if="isMenuOpen">
       <li><a href="#">Favorites</a></li>
       <li><a href="#">Recommendations</a></li> 
-      <li><a href="#">About Us</a></li>
+      <li><router-link id="about-link" v-bind:to="{ name: 'about-us'}">About Us</router-link> </li>
+      <li><router-link id="home-link" v-bind:to="{ name: 'home' }"><i class="fas fa-home"></i></router-link> </li>
     </ul>
   </div>
 
-
       <router-link id="home-link" v-bind:to="{ name: 'home' }"><i class="fas fa-home"></i></router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+      <router-link id="logout-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+
     </div>
     <router-view />
     <footer>
@@ -44,7 +45,6 @@ export default {
 </script>
 
 
-
 <style>
 .ellipsis-menu {
   position: relative;
@@ -52,11 +52,12 @@ export default {
 }
 
 .menu-icon {
-  width: 20px;
+  width: 50px;
   height: 20px;
   margin-right: 25px;
   margin-left: 10px;
   border-radius: 50%;
+  padding: 0.2px;
   cursor: pointer;
   color: white;
 }
@@ -80,34 +81,36 @@ export default {
 
    }
 
-
   footer {
     position: absolute;
-    /* bottom: 0; */
+    bottom: 0; 
     left: 0;
     right: 0;
     height: 1.5rem;
     background-color: rgba(0, 0, 0, 0.9);
     color: whitesmoke;
+
   }
 
   .menu {
   display: none;
-  position: absolute;
+  /* position: absolute; */
   top: 100%;
   left: 0;
-  background-color: #F9F9F9;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
   padding: 10px;
   list-style-type: none;
   margin: 0;
   border-radius: 5px;
+  font-size: 20px;
 }
 .menu li {
   margin-bottom: 10px;
 }
 .menu a {
   text-decoration: none;
-  color: #333;
+  color: rgb(243, 243, 243);
 }
 .ellipsis-menu:hover .menu {
   display: block;
@@ -123,5 +126,9 @@ export default {
   }
   #home-link:hover {
     color: rgba(245, 245, 245, 0.788);
-  }
+
+ }
+ #logout-link{
+   text-decoration: none;
+ }
 </style>
