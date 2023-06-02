@@ -2,6 +2,11 @@
   <div class="home">
     <h1>CinemaCrush</h1>
     <p> Swipe Right for Your Movie Night!</p>
+    <div class="poster-container">
+    <img class="poster1" src="https://m.media-amazon.com/images/M/MV5BNzQ1ODUzYjktMzRiMS00ODNiLWI4NzQtOTRiN2VlNTNmODFjXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_FMjpg_UX1000_.jpg" alt="Spider-Man">
+    <img class="poster2" src="https://m.media-amazon.com/images/M/MV5BYTUxYjczMWUtYzlkZC00NTcwLWE3ODQtN2I2YTIxOTU0ZTljXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_FMjpg_UX1000_.jpg" alt="The Little Mermaid">
+    <img class="poster3" src="https://m.media-amazon.com/images/M/MV5BMDgxOTdjMzYtZGQxMS00ZTAzLWI4Y2UtMTQzN2VlYjYyZWRiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_FMjpg_UX1000_.jpg" alt="Guardians vol. 3">
+  </div>  
   </div>
 </template>
 
@@ -20,7 +25,7 @@ export default {
 .home{
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   position: fixed;
   z-index: -1;
@@ -41,6 +46,28 @@ p{
   h1{
     color: #ffffff;
     font-size: 48px;
+  }
+
+  /* .poster-container {
+    display: flex;
+    width: 300px;
+  } */
+
+  .poster1 {
+    width: 300px;
+    height: auto;
+    margin-right: 20px;
+  }
+
+  .poster2 {
+    width: 300px;
+    height: auto;
+    margin-right: 20px;
+  }
+
+  .poster3 {
+    width: 300px;
+    height: auto;
   }
 
 </style>

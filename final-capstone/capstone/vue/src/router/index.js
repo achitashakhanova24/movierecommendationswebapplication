@@ -8,6 +8,7 @@ import store from '../store/index'
 import About from '../views/About.vue'
 import Favorites from '../views/Favorites.vue'
 import Recommendations from '../views/Recommendations.vue'
+import Profile from '../views/Profile.vue' 
 
 Vue.use(Router)
 
@@ -76,6 +77,14 @@ const router = new Router({
       path: "/recommendations",
       name: "recommendations",
       component: Recommendations,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      component: Profile,
       meta: {
         requiresAuth: false
       }

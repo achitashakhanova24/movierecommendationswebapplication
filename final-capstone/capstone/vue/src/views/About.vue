@@ -25,7 +25,7 @@ export default {
 };
 </script>
 
-<style >
+<style scoped>
 .AboutUs {
     display: flex;
   flex-direction: column;
@@ -39,6 +39,12 @@ export default {
   border-radius: 7px;
   margin-top: 30px;
   margin-left: -8px;
+}
+
+p{
+    color:white;
+    border: solid  black 2px;
+    
 }
 </style>
 
