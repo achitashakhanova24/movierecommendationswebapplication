@@ -11,10 +11,12 @@
 <div class="ellipsis-menu">
     <div class="menu-icon" @click="toggleMenu"><i class="fas fa-ellipsis-h"></i></div>
     <ul class="menu" v-if="isMenuOpen">
+      <li><router-link id="profile-link" v-bind:to="{ name: 'profile'}">Profile</router-link></li>
       <li><router-link id="favorites-link" v-bind:to="{ name: 'favorites'}">Favorites</router-link></li>
       <li><router-link id="recommendations-link" v-bind:to="{ name: 'recommendations'}">Recommendations</router-link></li> 
       <li><router-link id="about-link" v-bind:to="{ name: 'about-us'}">About Us</router-link> </li>
       <li><router-link id="home-link" v-bind:to="{ name: 'home' }"><i class="fas fa-home"></i></router-link> </li>
+      
     </ul>
   </div>
 
