@@ -21,7 +21,7 @@
       Need an account?<router-link class="register-link" :to="{ name: 'register' }"> Sign up now</router-link></p>
     </form>
     <div class="about">
-      
+      <p>Swipe Right for Your Movie Night!</p>
       <!-- <p>Picture this: You've swiped on countless potential "soulmates" on Tinder, but what 
        if there was an app that matched you with your perfect movie instead? Are you tired of 
        endlessly scrolling through movie recommendations that don't quite hit the mark? Look no further! 
@@ -113,7 +113,7 @@ button {
   color: rgb(245,245,245);
   font-size: 1.5em;
   width: 100vw;
-  height: 13rem;
+  height: 5rem;
   background-color: rgba(0, 0, 0, 0.9);
 }
 

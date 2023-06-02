@@ -1,24 +1,23 @@
 <template>
-  <div class="home">
-    <h1>CinemaCrush</h1>
-    <p> Swipe Right for Your Movie Night!</p>
+  <div class="recommendationsPage" @click="handleClick">
+<h1>Recommendations</h1>
+<p>Here are movies you should check out based on your previous selections!</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: "home",
-  methods: {
-    goToAbout(){
+    methods: {
+        handleClick(){
 
+        }
     }
-  }
-};
+}
 </script>
 
-<style scoped>
-.home{
-  display: flex;
+<style>
+.recommendationsPage {
+display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -31,16 +30,12 @@ export default {
   margin-top: 30px;
   margin-left: -8px;
 }
-.content{
-  color: #ffffff;
-  text-align: center;
-} 
-p{
-  color:#ffffff;
-}
-  h1{
-    color: #ffffff;
-    font-size: 48px;
-  }
 
+p{
+    color: white;
+}
+
+h1 {
+    color: white;
+}
 </style>

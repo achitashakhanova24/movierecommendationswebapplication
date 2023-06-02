@@ -5,6 +5,9 @@ import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
 import Register from '../views/Register.vue'
 import store from '../store/index'
+import About from '../views/About.vue'
+import Favorites from '../views/Favorites.vue'
+import Recommendations from '../views/Recommendations.vue'
 
 Vue.use(Router)
 
@@ -52,7 +55,31 @@ const router = new Router({
       meta: {
         requiresAuth: false
       }
-    }
+    },
+    {
+      path: "/about",
+      name: "about-us",
+      component: About,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: "/favorites",
+      name: "favorites",
+      component: Favorites,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: "/recommendations",
+      name: "recommendations",
+      component: Recommendations,
+      meta: {
+        requiresAuth: false
+      }
+    },
   ]
 })
 
