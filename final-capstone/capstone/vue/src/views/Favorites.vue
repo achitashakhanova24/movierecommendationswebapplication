@@ -1,23 +1,24 @@
 <template>
-  <div class="home">
-    <h1>CinemaCrush</h1>
-    <p> Swipe Right for Your Movie Night!</p>
+  <div class="favoritePage" @click="handleClick">
+      <h1>Top 10 Movies (Can Change)</h1>
+      <p>These are my favorite movies that I have seen. (CHANGE)</p>
+
   </div>
 </template>
 
 <script>
 export default {
-  name: "home",
-  methods: {
-    goToAbout(){
+    methods: {
+        handleClick(){
 
+        }
     }
-  }
+
 };
 </script>
 
 <style scoped>
-.home{
+.favoritePage {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,16 +32,14 @@ export default {
   margin-top: 30px;
   margin-left: -8px;
 }
-.content{
-  color: #ffffff;
-  text-align: center;
-} 
-p{
-  color:#ffffff;
-}
-  h1{
-    color: #ffffff;
-    font-size: 48px;
-  }
+/* .content{
+    color: white; */
 
+
+p{
+    color: white;
+}
+h1{
+    color: white;
+}
 </style>
