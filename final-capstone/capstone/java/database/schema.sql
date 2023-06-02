@@ -14,7 +14,6 @@ CREATE TABLE users (
 
 CREATE TABLE accounts (
     account_id SERIAL PRIMARY KEY,
-    favorites varchar(50) ARRAY,
     user_id integer,
     email varchar(100),
     CONSTRAINT FK_user_id FOREIGN KEY(user_id) REFERENCES users(user_id)

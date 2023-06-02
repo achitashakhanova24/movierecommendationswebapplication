@@ -7,14 +7,12 @@ public class Account {
     private int accountId;
     private int userId;
     private String email;
-    private List<String> favorites = new ArrayList<>();
 
     public Account(){}
 
-    public Account(int accountId, int userId, List<String> favorites, String email) {
+    public Account(int accountId, int userId, String email) {
         this.accountId = accountId;
         this.userId = userId;
-        this.favorites = favorites;
         this.email = email;
     }
 
@@ -41,14 +39,4 @@ public class Account {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-
-    public List<String> getFavorites() {
-        return favorites;
-    }
-
-    public void setFavorites(List<String> favorites) {
-        this.favorites = favorites;
-    }
-
-
 }

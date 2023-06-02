@@ -6,12 +6,10 @@ import java.util.List;
 public class AccountDto {
 
         private String email;
-        private List<String> favorites = new ArrayList<>();
 
         public AccountDto(){}
 
-        public AccountDto(List<String> favorites, String email) {
-            this.favorites = favorites;
+        public AccountDto(String email) {
             this.email = email;
         }
 
@@ -21,14 +19,6 @@ public class AccountDto {
 
         public void setEmail(String email) {
             this.email = email;
-        }
-
-        public List<String> getFavorites() {
-            return favorites;
-        }
-
-        public void setFavorites(List<String> favorites) {
-            this.favorites = favorites;
         }
 
 
