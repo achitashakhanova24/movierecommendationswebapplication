@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Movie {
-
+    private int movieId;
     private String title;
     private String language;
     private List<String> listOfGenres;
@@ -14,16 +14,25 @@ public class Movie {
     private Date releaseDate;
     private String description;
 
-    public Movie(String title, String language, List<String> listOfGenres, int runtime, Date releaseDate, String description) {
+    public Movie(int movieId, String title, String language, List<String> listOfGenres, int runtime, Date releaseDate, String description) {
         this.title = title;
         this.language = language;
         this.listOfGenres = listOfGenres;
         this.runtime = runtime;
         this.releaseDate = releaseDate;
         this.description = description;
+        this.movieId = movieId;
     }
 
     public Movie(){}
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
+    }
 
     public String getTitle() {
         return title;
