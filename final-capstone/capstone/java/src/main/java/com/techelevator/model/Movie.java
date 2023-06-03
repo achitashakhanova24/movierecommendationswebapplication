@@ -13,8 +13,9 @@ public class Movie {
     private int runtime;
     private Date releaseDate;
     private String description;
+    private String posterPath;
 
-    public Movie(int movieId, String title, String language, List<String> listOfGenres, int runtime, Date releaseDate, String description) {
+    public Movie(int movieId, String title, String language, List<String> listOfGenres, int runtime, Date releaseDate, String description, String posterPath) {
         this.title = title;
         this.language = language;
         this.listOfGenres = listOfGenres;
@@ -22,9 +23,18 @@ public class Movie {
         this.releaseDate = releaseDate;
         this.description = description;
         this.movieId = movieId;
+        this.posterPath = posterPath;
     }
 
     public Movie(){}
+
+    public String getPosterPath() {
+        return posterPath;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
 
     public int getMovieId() {
         return movieId;

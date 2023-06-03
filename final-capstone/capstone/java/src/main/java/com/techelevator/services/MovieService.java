@@ -1,7 +1,4 @@
 package com.techelevator.services;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -16,25 +13,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
 @Service
 public class MovieService {
 
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("d MMM uuu");
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     HttpHeaders headers = new HttpHeaders();
     private Map<Integer, String> genreIdToName = new HashMap<>();
 
@@ -131,6 +118,7 @@ public class MovieService {
                 movie.setRuntime(jsonNode.get(i).path("runtime").asInt());
                 movie.setReleaseDate(new SimpleDateFormat("yyyy-MM-dd").parse(jsonNode.get(i).path("release_date").asText()));
                 movie.setDescription(jsonNode.get(i).path("overview").asText());
+                movie.setPosterPath(jsonNode.get(i).path("poster_path").asText());
 
                 movie.setMovieId(jsonNode.get(i).path("id").asInt());
                 for (int j = 0; j < array.size(); j++) {
