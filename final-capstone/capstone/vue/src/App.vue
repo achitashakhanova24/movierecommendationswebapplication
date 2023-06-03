@@ -79,7 +79,7 @@ export default {
     left: 0;
     right: 0;
     font-size: 2em;
-
+    font-family: 'Paytone One', sans-serif;
 
    }
 

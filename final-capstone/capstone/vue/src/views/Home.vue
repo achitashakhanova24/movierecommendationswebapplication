@@ -1,22 +1,67 @@
 <template>
   <div class="home">
+    <head>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
     <h1>CinemaCrush</h1>
     <p> Swipe Right for Your Movie Night!</p>
     <div class="poster-container">
-    <img class="poster1" src="https://m.media-amazon.com/images/M/MV5BNzQ1ODUzYjktMzRiMS00ODNiLWI4NzQtOTRiN2VlNTNmODFjXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_FMjpg_UX1000_.jpg" alt="Spider-Man">
-    <img class="poster2" src="https://m.media-amazon.com/images/M/MV5BYTUxYjczMWUtYzlkZC00NTcwLWE3ODQtN2I2YTIxOTU0ZTljXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_FMjpg_UX1000_.jpg" alt="The Little Mermaid">
-    <img class="poster3" src="https://m.media-amazon.com/images/M/MV5BMDgxOTdjMzYtZGQxMS00ZTAzLWI4Y2UtMTQzN2VlYjYyZWRiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_FMjpg_UX1000_.jpg" alt="Guardians vol. 3">
-  </div>  
+      <div>
+        <b-carousel
+          id="carousel"
+          v-model="slide"
+          :interval="4000"
+          controls
+          indicators
+          background="#ababab"
+          img-width="1024"
+          img-height="480"
+          style="text-shadow: 1px 1px 2px #333;"
+          @sliding-start="onSlideStart"
+          @sliding-end="onSlideEnd"
+        >
+          <b-carousel-slide v-for="movie in newReleases" v-bind:key="movie.id" class="carousel-item" :img-src="movie.posterPath" :img-alt="movie.title">
+          </b-carousel-slide>
+        </b-carousel>
+      </div>   
+    </div>  
   </div>
 </template>
-
+<script src="js/jquery-1.7.1.min.js"></script>
+<script src="js/bootstrap.js"></script>
 <script>
+import authService from "../services/AuthService";
+
 export default {
   name: "home",
+  data() {
+    return {
+      newReleases: [],
+      slide: 0,
+      sliding: null
+      
+    }
+  },
   methods: {
     goToAbout(){
 
+    },
+    onSlideStart(slide) {
+        this.sliding = true
+      },
+    onSlideEnd(slide) {
+        this.sliding = false
     }
+  },
+  created() {
+    authService.home().then(response => {
+      this.newReleases = response.data.filter(movie => {
+        return movie.posterPath != "null";
+      });
+      this.newReleases.forEach(movie => {
+        movie.posterPath = "https://image.tmdb.org/t/p/w342/" + movie.posterPath;
+      })
+    })
   }
 };
 </script>
@@ -25,7 +70,6 @@ export default {
 .home{
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
   position: fixed;
   z-index: -1;
@@ -35,6 +79,7 @@ export default {
   border-radius: 7px;
   margin-top: 30px;
   margin-left: -8px;
+  font-family: 'Paytone One', sans-serif;
 }
 .content{
   color: #ffffff;
@@ -68,6 +113,9 @@ p{
   .poster3 {
     width: 300px;
     height: auto;
+  }
+  b-carousel {
+    font-family: 'Paytone One', sans-serif;
   }
 
 </style>

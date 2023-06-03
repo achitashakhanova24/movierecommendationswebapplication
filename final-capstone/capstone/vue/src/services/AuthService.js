@@ -11,7 +11,7 @@ export default {
   },
 
   home() {
-    return axios.post('/movie/newReleases')
+    return axios.get('/movie/newReleases')
   }
 
 }
