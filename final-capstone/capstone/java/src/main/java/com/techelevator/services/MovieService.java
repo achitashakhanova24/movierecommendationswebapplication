@@ -55,7 +55,81 @@ public class MovieService {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    public Movie getMovie(){
+    public Movie getMovie(int movieId) {
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode;
+        ResponseEntity<String> responseEntity = restTemplate.exchange(MOVIE_API + "/movie/" + movieId + "?api_key=" + KEY, HttpMethod.GET, entity, String.class);
+        Movie movie = new Movie();
+
+        try{
+            jsonNode = mapper.readTree(responseEntity.getBody());
+            movie.setTitle(jsonNode.path("original_title").asText());
+            movie.setLanguage(jsonNode.path("original_language").asText());
+            JsonNode array = jsonNode.path("genres");
+
+            List<String> genreList = new ArrayList<>();
+            for (int i = 0; i < array.size(); i++){
+                String genre = array.get(i).path("name").asText();
+                genreList.add(genre);
+            }
+
+            movie.setRuntime(jsonNode.path("runtime").asInt());
+            movie.setReleaseDate(new SimpleDateFormat("yyyy-MM-dd").parse(jsonNode.path("release_date").asText()));
+            movie.setDescription(jsonNode.path("overview").asText());
+            movie.setListOfGenres(genreList);
+            movie.setMovieId(jsonNode.path("id").asInt());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return movie;
+    }
+
+    public List<Movie> getPageOfMovies(int page) {
+        List<Movie> movies = new ArrayList<>();
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode;
+        ResponseEntity<String> responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&page=" + page + "&language=en-US", HttpMethod.GET, entity, String.class);
+
+        try {
+            jsonNode = mapper.readTree(responseEntity.getBody()).path("results");
+
+            for (int i = 0; i < jsonNode.size(); i++) {
+                List<String> genreList = new ArrayList<>();
+                Movie movie = new Movie();
+                movie.setTitle(jsonNode.get(i).path("original_title").asText());
+                movie.setLanguage(jsonNode.get(i).path("original_language").asText());
+                JsonNode array = jsonNode.get(i).path("genre_ids");
+                movie.setRuntime(jsonNode.get(i).path("runtime").asInt());
+                movie.setReleaseDate(new SimpleDateFormat("yyyy-MM-dd").parse(jsonNode.get(i).path("release_date").asText()));
+                movie.setDescription(jsonNode.get(i).path("overview").asText());
+                movie.setPosterPath(jsonNode.get(i).path("poster_path").asText());
+
+                movie.setMovieId(jsonNode.get(i).path("id").asInt());
+                for (int j = 0; j < array.size(); j++) {
+                    int genre = array.get(j).asInt();
+                    genreList.add(genreIdToName.get(genre));
+                }
+                movie.setListOfGenres(genreList);
+                movies.add(movie);
+            }
+
+            return movies;
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return movies;
+    }
+
+    public Movie getRandomMovie(){
         //headers.setBearerAuth(KEY);
         int page = (int)Math.floor(Math.random() * 500);
         int index = (int)Math.floor(Math.random()*19);
