@@ -4,6 +4,7 @@
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     </head>
     <h1>CinemaCrush</h1>
+    <router-link v-bind:to="{name: 'movie-list'}">Browse Movies</router-link>
     <p> Swipe Right for Your Movie Night!</p>
     <div class="poster-container">
       <div>
@@ -30,7 +31,7 @@
 <script src="js/jquery-1.7.1.min.js"></script>
 <script src="js/bootstrap.js"></script>
 <script>
-import authService from "../services/AuthService";
+import movieService from "../services/MovieService";
 
 export default {
   name: "home",
@@ -54,7 +55,7 @@ export default {
     }
   },
   created() {
-    authService.home().then(response => {
+    movieService.home().then(response => {
       this.newReleases = response.data.filter(movie => {
         return movie.posterPath != "null";
       });

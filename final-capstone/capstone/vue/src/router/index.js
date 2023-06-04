@@ -9,6 +9,7 @@ import About from '../views/About.vue'
 import Favorites from '../views/Favorites.vue'
 import Recommendations from '../views/Recommendations.vue'
 import Profile from '../views/Profile.vue' 
+import MovieList from '../views/MovieList.vue'
 
 Vue.use(Router)
 
@@ -89,6 +90,14 @@ const router = new Router({
         requiresAuth: false
       }
     },
+    {
+      path: `/movie/list`,
+      name: "movie-list",
+      component: MovieList,
+      meta: {
+        requiresAuth: true
+      }
+    }
   ]
 })
 
