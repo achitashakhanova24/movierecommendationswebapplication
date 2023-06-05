@@ -24,7 +24,7 @@
       <router-link id="logout-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
 
     </div>
-    <router-view />
+    <router-view/>
     <footer>
       &copy; 2023 - CinemaCrush.com
     </footer>
@@ -132,5 +132,9 @@ export default {
  }
  #logout-link{
    text-decoration: none;
+ }
+
+ router-view {
+   background-color: transparent;
  }
 </style>
