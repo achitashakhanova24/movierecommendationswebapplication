@@ -3,7 +3,7 @@
   <div id="register" class="text-center">
     <form @submit.prevent="register">
       <h1>Create Account</h1>
-      <div role="alert" v-if="registrationErrors">
+      <div class="alert" role="alert" v-if="registrationErrors">
         {{ registrationErrorMsg }}
       </div>
       <div class="form-input-group">
@@ -39,7 +39,7 @@ export default {
         role: 'user',
       },
       registrationErrors: false,
-      registrationErrorMsg: 'There were problems registering this user.',
+      registrationErrorMsg: 'User created successfully.', 
     };
   },
   methods: {
@@ -53,7 +53,7 @@ export default {
           .then((response) => {
             if (response.status == 201) {
               this.$router.push({
-                path: '/login',
+                name: 'login',
                 query: { registration: 'success' },
               });
             }

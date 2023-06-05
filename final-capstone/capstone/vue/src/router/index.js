@@ -95,7 +95,7 @@ const router = new Router({
       name: "movie-list",
       component: MovieList,
       meta: {
-        requiresAuth: true
+        requiresAuth: false
       }
     }
   ]

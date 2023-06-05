@@ -10,8 +10,19 @@ export default {
     return axios.get(`/movie/${movieId}`)
   },
 
-  getPageOfMovies(page) {
-    return axios.get(`/movie/list/${page}`)
+  // getPageOfMovies(page) {
+    getPageOfMovies(page, title, genre, date, language) {
+
+    const params = {
+      page: page,
+      title: title,
+      genre: genre,
+      data: date,
+      language: language
+    };
+
+    // return axios.get('/api/movies', { params });
+    return axios.get(`/movie/list/${page}`, { params});
   }
 
 }

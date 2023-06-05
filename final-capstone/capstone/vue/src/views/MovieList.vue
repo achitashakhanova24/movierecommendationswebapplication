@@ -3,29 +3,34 @@
 
 <html lang="en">
     <div class="movie-list">
+        <div class="vignette"></div>
         <head>
             
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         </head>
         <div class="table-div">
             <h2>Browse Movies</h2>
-            <form @submit.prevent="login">
+            <form @submit.prevent="getPage(1)">
                 <div>
                     <label for="title">Title </label>
-                    <input id="title" type="text" placeholder="Title">
+                    <input id="title" type="text" placeholder="Title" v-model="filterTitle">
                 </div>
                 <div>
                     <label for="title">Genre </label>
-                    <input type="text" placeholder="Genre">
+                    <input id="genre" type="text" placeholder="Genre" v-model="filterGenre">
                 </div>
                 <div>
                     <label for="title">Release Date</label>
-                    <input type="date">
+                    <input id="date" type="date" v-model="filterDate">
                 </div>
                 <div>
                     <label for="title">Language</label>
-                    <input type="text" placeholder="Language">
+                    <input id="language" type="text" placeholder="Language" v-model="filterLanguage">
                 </div>
+                <div class="filterButton">
+                    <button type="submit">Submit</button>
+                </div>
+
             </form>
             <b-table
             striped hover
@@ -56,8 +61,12 @@ export default {
         return {
             currentPage: 1,
             rows: 10,
-            movies: []
-        }
+            movies: [],
+            filterTitle: '',
+            filterGenre: '',
+            filterDate: '',
+            filterLanguage: ''
+        };
     },
     created() {
         for(let i = 1; i <= 20; i++) {
@@ -76,10 +85,19 @@ export default {
     },
     methods: {
         getPage(page) {
-            movieService.getPageOfMovies(page).then(response => {
+            if (!this.isAuthenticated) {
+                // redirect to login page 
+                return;
+            }
+
+            movieService.getPageOfMovies(page, this.filterTitle, this.filterGenre, this.filterDate, this.filterLanguage)
+            .then(response => {
             console.log(response.data);
             return response.data;
         })
+        .catch(error => {
+            console.error(error);
+        });
         }
     }
 
@@ -88,6 +106,22 @@ export default {
 
 
 <style scoped>
+.vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 7px;
+  background-image: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.7) 60%
+  );
+  z-index: -1;
+}
+
+
     form {
         display: flex;
         color: whitesmoke;
@@ -106,7 +140,7 @@ export default {
     table {
         font-size: 70%;
         height: 600px;
-        background-color: rgba(122, 118, 118, 0.89);
+        background-color: whitesmoke;
     }
 
     h2{
@@ -122,6 +156,7 @@ export default {
         background-color: transparent;
         box-sizing: content-box;
         font-family: 'Paytone One', sans-serif;
+        z-index: -1;
     }
     .table-div {
         width: 90vw;

@@ -11,17 +11,20 @@
 <div class="ellipsis-menu">
     <div class="menu-icon" @click="toggleMenu"><i class="fas fa-ellipsis-h"></i></div>
     <ul class="menu" v-if="isMenuOpen">
+      <br>
+      <li><router-link id="home-link" v-bind:to="{ name: 'home' }"><i class="fas fa-home"></i></router-link> </li>
+      <li><router-link id="about-link" v-bind:to="{ name: 'about-us'}">About Us</router-link> </li>
       <li><router-link id="profile-link" v-bind:to="{ name: 'profile'}">Profile</router-link></li>
       <li><router-link id="favorites-link" v-bind:to="{ name: 'favorites'}">Favorites</router-link></li>
       <li><router-link id="recommendations-link" v-bind:to="{ name: 'recommendations'}">Recommendations</router-link></li> 
-      <li><router-link id="about-link" v-bind:to="{ name: 'about-us'}">About Us</router-link> </li>
-      <li><router-link id="home-link" v-bind:to="{ name: 'home' }"><i class="fas fa-home"></i></router-link> </li>
-      
+      <li><router-link id="browse-link" v-bind:to="{name: 'movie-list'}">Browse Movies</router-link></li>
+      <li><router-link id="logout-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link></li>
+
     </ul>
   </div>
-
-      <router-link id="home-link" v-bind:to="{ name: 'home' }"><i class="fas fa-home"></i></router-link>&nbsp;|&nbsp;
-      <router-link id="logout-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+      
+      <!-- <router-link id="home-link" v-bind:to="{ name: 'home' }"><i class="fas fa-home"></i></router-link>&nbsp;|&nbsp; -->
+      <!-- <router-link id="logout-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link> -->
 
     </div>
     <router-view/>
@@ -80,7 +83,7 @@ export default {
     right: 0;
     font-size: 2em;
     font-family: 'Paytone One', sans-serif;
-
+    z-index: 9999;
    }
 
   footer {
@@ -116,6 +119,7 @@ export default {
 }
 .ellipsis-menu:hover .menu {
   display: block;
+  background-color: black;
 }
 
   router-view {
@@ -130,8 +134,42 @@ export default {
     color: rgba(245, 245, 245, 0.788);
 
  }
+ #about-link {
+   text-decoration: none;
+ }
+ #about-link:hover {
+   color: rgba(245, 245, 245, 0.788);
+ }
+
+ #profile-link {
+   text-decoration: none;
+ }
+ #profile-link:hover {
+   color: rgba(245, 245, 245, 0.788);
+ }
+ #favorites-link {
+   text-decoration: none;
+ }
+ #favorites-link:hover {
+   color: rgba(245, 245, 245, 0.788);
+ }
+ #recommendations-link {
+   text-decoration: none;
+ }
+ #recommendations-link:hover {
+   color: rgba(245, 245, 245, 0.788);
+ }
+ #browse-link {
+   text-decoration: none;
+ }
+ #browse-link:hover {
+   color: rgba(245, 245, 245, 0.788);
+ }
  #logout-link{
    text-decoration: none;
+ }
+ #logout-link:hover {
+   color: red
  }
 
  router-view {

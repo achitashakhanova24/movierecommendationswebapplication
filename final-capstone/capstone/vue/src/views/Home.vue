@@ -1,10 +1,11 @@
 <template>
   <div class="home">
+    <div class="vignette"></div>
     <head>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     </head>
     <h1>CinemaCrush</h1>
-    <router-link v-bind:to="{name: 'movie-list'}">Browse Movies</router-link>
+    
     <p> Swipe Right for Your Movie Night!</p>
     <div class="poster-container">
       <div>
@@ -60,7 +61,7 @@ export default {
         return movie.posterPath != "null";
       });
       this.newReleases.forEach(movie => {
-        movie.posterPath = "https://image.tmdb.org/t/p/w342/" + movie.posterPath;
+        movie.posterPath = "https://image.tmdb.org/t/p/w500/" + movie.posterPath;
       })
     })
   }
@@ -68,13 +69,29 @@ export default {
 </script>
 
 <style scoped>
+.vignette{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 7px;
+  background-image: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.9) 60%
+  );
+  z-index: -1;
+}
+
+
 .home{
   display: flex;
   flex-direction: column;
   align-items: center;
   position: fixed;
   z-index: -1;
-  background-color: rgba(0, 0, 0, 0.5);
+  /* background-color: rgba(0, 0, 0, 0.7); */
   width: 100%;
   height: 100%;
   border-radius: 7px;
@@ -88,10 +105,11 @@ export default {
 } 
 p{
   color:#ffffff;
+  font-size: 42px;
 }
   h1{
     color: #ffffff;
-    font-size: 48px;
+    font-size: 58px;
   }
 
   /* .poster-container {
