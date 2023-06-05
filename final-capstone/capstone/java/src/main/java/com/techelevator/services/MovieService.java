@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.techelevator.model.Movie;
+import com.techelevator.model.MovieDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -24,6 +26,7 @@ public class MovieService {
 
     HttpHeaders headers = new HttpHeaders();
     private Map<Integer, String> genreIdToName = new HashMap<>();
+    private Map<String, String> langAbbrevToFull = new HashMap<>();
 
     public MovieService () {
         genreIdToName.put(28,"Action");
@@ -87,8 +90,8 @@ public class MovieService {
         return movie;
     }
 
-    public List<Movie> getPageOfMovies(int page) {
-        List<Movie> movies = new ArrayList<>();
+    public List<MovieDto> getPageOfMovies(int page) {
+        List<MovieDto> movies = new ArrayList<>();
         HttpEntity<Void> entity = new HttpEntity<>(headers);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode;
@@ -96,33 +99,10 @@ public class MovieService {
 
         try {
             jsonNode = mapper.readTree(responseEntity.getBody()).path("results");
-
-            for (int i = 0; i < jsonNode.size(); i++) {
-                List<String> genreList = new ArrayList<>();
-                Movie movie = new Movie();
-                movie.setTitle(jsonNode.get(i).path("original_title").asText());
-                movie.setLanguage(jsonNode.get(i).path("original_language").asText());
-                JsonNode array = jsonNode.get(i).path("genre_ids");
-                movie.setRuntime(jsonNode.get(i).path("runtime").asInt());
-                movie.setReleaseDate(new SimpleDateFormat("yyyy-MM-dd").parse(jsonNode.get(i).path("release_date").asText()));
-                movie.setDescription(jsonNode.get(i).path("overview").asText());
-                movie.setPosterPath(jsonNode.get(i).path("poster_path").asText());
-
-                movie.setMovieId(jsonNode.get(i).path("id").asInt());
-                for (int j = 0; j < array.size(); j++) {
-                    int genre = array.get(j).asInt();
-                    genreList.add(genreIdToName.get(genre));
-                }
-                movie.setListOfGenres(genreList);
-                movies.add(movie);
-            }
-
-            return movies;
+            movies = mapResultSetToDto(jsonNode);
         } catch (JsonMappingException e) {
             e.printStackTrace();
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
             e.printStackTrace();
         }
 
@@ -214,6 +194,112 @@ public class MovieService {
         return movies;
     }
 
+    public List<MovieDto> searchMovies(String searchTitle, String searchGenre, String releaseDate, String language) {
+        List<MovieDto> movies = new ArrayList<>();
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode;
+        ResponseEntity<String> responseEntity = null;
+        if(searchTitle != null) {
+           responseEntity = restTemplate.exchange(MOVIE_API + "/search/movie" + "?api_key=" + KEY + "&query=" + searchTitle, HttpMethod.GET, entity, String.class);
+        }
+        else if(searchGenre != null && releaseDate != null && language != null) {
+            int genreId = 0;
+                for (Integer key : genreIdToName.keySet() ) {
+                    if(genreIdToName.get(key).equalsIgnoreCase(searchGenre)){
+                        genreId = key;
+                    }
+                }
+
+            responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&with_genres=" + genreId + "&primary_release_date.gte=" + releaseDate + "&language=" + language, HttpMethod.GET, entity, String.class);
+        }
+        else if(searchGenre != null && releaseDate != null){
+            int genreId = 0;
+                for (Integer key : genreIdToName.keySet() ) {
+                    if(genreIdToName.get(key).equalsIgnoreCase(searchGenre)){
+                        genreId = key;
+                    }
+                }
+
+            responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&with_genres=" + genreId + "&primary_release_date.gte=" + releaseDate, HttpMethod.GET, entity, String.class);
+        }
+        else if(releaseDate != null && language != null){
+            responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&primary_release_date.gte=" + releaseDate + "&language=" + language, HttpMethod.GET, entity, String.class);
+        }
+        else if(searchGenre != null && language != null){
+            int genreId = 0;
+            for (Integer key : genreIdToName.keySet() ) {
+                if(genreIdToName.get(key).equalsIgnoreCase(searchGenre)){
+                     genreId = key;
+                }
+            }
+
+            responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&with_genres=" + genreId + "&language=" + language, HttpMethod.GET, entity, String.class);
+        }
+        else if(releaseDate != null){
+            int genreId = 0;
+            if(searchGenre != null) {
+                for (Integer key : genreIdToName.keySet() ) {
+                    if(genreIdToName.get(key).equalsIgnoreCase(searchGenre)){
+                        genreId = key;
+                    }
+                }
+            }
+            responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&primary_release_date.gte=" + releaseDate, HttpMethod.GET, entity, String.class);
+        }
+        else if(searchGenre != null){
+            int genreId = 0;
+                for (Integer key : genreIdToName.keySet() ) {
+                    if(genreIdToName.get(key).equalsIgnoreCase(searchGenre)){
+                        genreId = key;
+                    }
+                }
+            responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&with_genres=" + genreId, HttpMethod.GET, entity, String.class);
+        }
+        else if(language != null){
+            responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&language=" + language, HttpMethod.GET, entity, String.class);
+        }
+        try{
+            jsonNode = mapper.readTree(responseEntity.getBody()).path("results");
+            movies = mapResultSetToDto(jsonNode);
+            return movies;
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return movies;
+    }
+
+
+    public List<MovieDto> mapResultSetToDto(JsonNode jsonNode){
+        List<MovieDto> movies = new ArrayList<>();
+        for (int i = 0; i < jsonNode.size(); i++) {
+            String genreList = "";
+            MovieDto movie = new MovieDto();
+            movie.setTitle(jsonNode.get(i).path("original_title").asText());
+            movie.setLanguage(jsonNode.get(i).path("original_language").asText());
+            JsonNode array = jsonNode.get(i).path("genre_ids");
+            String release = jsonNode.get(i).path("release_date").asText().equals("") ? "Unreleased" : jsonNode.get(i).path("release_date").asText().substring(0,10);
+            movie.setReleaseDate(release);
+            movie.setDescription(jsonNode.get(i).path("overview").asText());
+
+//                movie.setMovieId(jsonNode.get(i).path("id").asInt());
+            for (int j = 0; j < array.size(); j++) {
+                int genre = array.get(j).asInt();
+                if(j == (array.size()-1)){
+                    genreList += genreIdToName.get(genre);
+                }
+                else {
+                    genreList += genreIdToName.get(genre) + ", ";
+                }
+            }
+            movie.setGenres(genreList);
+            movies.add(movie);
+        }
+
+        return movies;
+    }
     /*public List<Movie> getRandomMovies(int count) {
         List<Movie> randomMovies = new ArrayList<>();
         for (int i = 0; i < count; i++) {
