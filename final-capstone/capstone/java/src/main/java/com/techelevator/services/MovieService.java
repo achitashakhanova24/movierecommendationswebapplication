@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.techelevator.model.Movie;
 import com.techelevator.model.MovieDto;
+import com.techelevator.model.MovieTableDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -58,12 +59,12 @@ public class MovieService {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    public Movie getMovie(int movieId) {
+    public MovieDto getMovie(int movieId) {
         HttpEntity<Void> entity = new HttpEntity<>(headers);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode;
         ResponseEntity<String> responseEntity = restTemplate.exchange(MOVIE_API + "/movie/" + movieId + "?api_key=" + KEY, HttpMethod.GET, entity, String.class);
-        Movie movie = new Movie();
+        MovieDto movie = new MovieDto();
 
         try{
             jsonNode = mapper.readTree(responseEntity.getBody());
@@ -71,27 +72,24 @@ public class MovieService {
             movie.setLanguage(jsonNode.path("original_language").asText());
             JsonNode array = jsonNode.path("genres");
 
-            List<String> genreList = new ArrayList<>();
+            String genreList = "";
             for (int i = 0; i < array.size(); i++){
                 String genre = array.get(i).path("name").asText();
-                genreList.add(genre);
+                genreList += genre;
             }
 
-            movie.setRuntime(jsonNode.path("runtime").asInt());
-            movie.setReleaseDate(new SimpleDateFormat("yyyy-MM-dd").parse(jsonNode.path("release_date").asText()));
+            movie.setReleaseDate(jsonNode.path("release_date").asText());
             movie.setDescription(jsonNode.path("overview").asText());
-            movie.setListOfGenres(genreList);
+            movie.setGenres(genreList);
             movie.setMovieId(jsonNode.path("id").asInt());
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
             e.printStackTrace();
         }
         return movie;
     }
 
-    public List<MovieDto> getPageOfMovies(int page) {
-        List<MovieDto> movies = new ArrayList<>();
+    public List<MovieTableDto> getPageOfMovies(int page) {
+        List<MovieTableDto> movies = new ArrayList<>();
         HttpEntity<Void> entity = new HttpEntity<>(headers);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode;
@@ -194,8 +192,8 @@ public class MovieService {
         return movies;
     }
 
-    public List<MovieDto> searchMovies(String searchTitle, String searchGenre, String releaseDate, String language) {
-        List<MovieDto> movies = new ArrayList<>();
+    public List<MovieTableDto> searchMovies(String searchTitle, String searchGenre, String releaseDate, String language) {
+        List<MovieTableDto> movies = new ArrayList<>();
         HttpEntity<Void> entity = new HttpEntity<>(headers);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode;
@@ -272,11 +270,11 @@ public class MovieService {
     }
 
 
-    public List<MovieDto> mapResultSetToDto(JsonNode jsonNode){
-        List<MovieDto> movies = new ArrayList<>();
+    public List<MovieTableDto> mapResultSetToDto(JsonNode jsonNode){
+        List<MovieTableDto> movies = new ArrayList<>();
         for (int i = 0; i < jsonNode.size(); i++) {
             String genreList = "";
-            MovieDto movie = new MovieDto();
+            MovieTableDto movie = new MovieTableDto();
             movie.setTitle(jsonNode.get(i).path("original_title").asText());
             movie.setLanguage(jsonNode.get(i).path("original_language").asText());
             JsonNode array = jsonNode.get(i).path("genre_ids");

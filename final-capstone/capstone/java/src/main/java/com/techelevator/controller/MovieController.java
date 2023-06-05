@@ -3,6 +3,7 @@ package com.techelevator.controller;
 import com.techelevator.dao.MovieDao;
 import com.techelevator.model.Movie;
 import com.techelevator.model.MovieDto;
+import com.techelevator.model.MovieTableDto;
 import com.techelevator.services.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -36,13 +38,13 @@ public class MovieController {
     }
 
     @GetMapping(path="/{movieId}")
-    public ResponseEntity<Movie> getMovie(@PathVariable int movieId){
+    public ResponseEntity<MovieDto> getMovie(@PathVariable int movieId){
 
         return new ResponseEntity<>(movieService.getMovie(movieId), HttpStatus.OK) ;
     }
 
     @GetMapping(path="/list/{page}")
-    public ResponseEntity<List<MovieDto>> getPageOfMovies(@PathVariable int page){
+    public ResponseEntity<List<MovieTableDto>> getPageOfMovies(@PathVariable int page){
 
         return new ResponseEntity<>(movieService.getPageOfMovies(page), HttpStatus.OK) ;
     }
@@ -54,7 +56,12 @@ public class MovieController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<MovieDto>> searchMovies(@RequestParam(required = false) @DefaultValue("") String title, @RequestParam(required = false) @DefaultValue("") String genre, @RequestParam(required = false) @DefaultValue("") String releaseDate, @RequestParam(required = false) @DefaultValue("") String language){
+    public ResponseEntity<List<MovieTableDto>> searchMovies(@RequestParam(required = false) @DefaultValue("") String title, @RequestParam(required = false) @DefaultValue("") String genre, @RequestParam(required = false) @DefaultValue("") String releaseDate, @RequestParam(required = false) @DefaultValue("") String language){
         return new ResponseEntity<>(movieService.searchMovies(title, genre, releaseDate, language), HttpStatus.OK);
+    }
+
+    @PostMapping("/favorite/{movieId}")
+    public ResponseEntity<MovieDto> favoriteMovie(@PathVariable int movieId, Principal principal){
+        return new ResponseEntity<>(movieDao.favoriteMovie(movieId, principal.getName()), HttpStatus.CREATED);
     }
 }
