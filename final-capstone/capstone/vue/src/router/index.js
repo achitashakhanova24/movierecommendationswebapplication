@@ -100,7 +100,7 @@ const router = new Router({
       }
     },
     {
-      path: "/movie/details",
+      path: "/movie/details/:id",
       name: "movie-details",
       component: MovieDetails,
       meta: {
