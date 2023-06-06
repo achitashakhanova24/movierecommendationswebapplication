@@ -2,6 +2,7 @@ package com.techelevator.model;
 
 public class MovieTableDto {
     private String title;
+    public double rating;
     private String genres;
     private String releaseDate;
     private String description;
@@ -9,12 +10,21 @@ public class MovieTableDto {
 
     public MovieTableDto(){}
 
-    public MovieTableDto(String title, String genres, String releaseDate, String description, String language){
+    public MovieTableDto(String title, String genres, String releaseDate, String description, String language, double rating){
         this.title = title;
+        this.rating = rating;
         this.genres = genres;
         this.releaseDate = releaseDate;
         this.description = description;
         this.language = language;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public String getTitle() {
