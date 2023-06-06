@@ -43,10 +43,10 @@ public class MovieController {
         return new ResponseEntity<>(movieService.getMovie(movieId), HttpStatus.OK) ;
     }
 
-    @GetMapping(path="/list/{page}")
-    public ResponseEntity<List<MovieTableDto>> getPageOfMovies(@PathVariable int page){
+    @GetMapping(path="/list")
+    public ResponseEntity<List<MovieTableDto>> getPageOfMovies(){
 
-        return new ResponseEntity<>(movieService.getPageOfMovies(page), HttpStatus.OK) ;
+        return new ResponseEntity<>(movieService.getPageOfMovies(), HttpStatus.OK) ;
     }
 
     @GetMapping("/newReleases")
