@@ -69,14 +69,14 @@ export default {
         };
     },
     created() {
-        for(let i = 1; i <= 20; i++) {
-            movieService.getPageOfMovies(i).then(response => {
+        
+            movieService.getPageOfMovies().then(response => {
                 console.log(response.data)
                 response.data.forEach(currentMovie => {
                     this.movies.push(currentMovie);
                 })
             })
-        }
+        
         console.log(this.movies);
         // movieService.getPageOfMovies(1).then(response => {
         //     console.log(response.data);

@@ -10,19 +10,18 @@ export default {
     return axios.get(`/movie/${movieId}`)
   },
 
-  // getPageOfMovies(page) {
-    getPageOfMovies(page, title, genre, date, language) {
+     getPageOfMovies() {
 
-    const params = {
-      page: page,
-      title: title,
-      genre: genre,
-      data: date,
-      language: language
-    };
+    // const params = {
+    //   page: page,
+    //   title: title,
+    //   genre: genre,
+    //   data: date,
+    //   language: language
+    // };
 
     // return axios.get('/api/movies', { params });
-    return axios.get(`/movie/list/${page}`, { params});
+    return axios.get(`/movie/list`);
   }
 
 }
