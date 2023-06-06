@@ -10,6 +10,7 @@ import Favorites from '../views/Favorites.vue'
 import Recommendations from '../views/Recommendations.vue'
 import Profile from '../views/Profile.vue' 
 import MovieList from '../views/MovieList.vue'
+import MovieDetails from '../views/MovieDetails.vue'
 
 Vue.use(Router)
 
@@ -91,13 +92,21 @@ const router = new Router({
       }
     },
     {
-      path: `/movie/list`,
+      path: "/movie/list",
       name: "movie-list",
       component: MovieList,
       meta: {
         requiresAuth: false
       }
-    }
+    },
+    {
+      path: "/movie/details",
+      name: "movie-details",
+      component: MovieDetails,
+      meta: {
+        requiresAuth: false
+      }
+    },
   ]
 })
 
