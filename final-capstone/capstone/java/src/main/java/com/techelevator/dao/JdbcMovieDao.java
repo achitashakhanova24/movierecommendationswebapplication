@@ -44,17 +44,17 @@ public class JdbcMovieDao implements MovieDao{
         String sql = "INSERT INTO favorites (user_id, movie_id, watched) " +
                 "VALUES ((SELECT user_id FROM users WHERE username = ?), ?, ?) RETURNING favorites_id";
         try {
-            MovieDto movieDto = movieService.getMovie(movieId);
-            if(movieDto != null){
+            MovieDto dto = getFavoriteMovie(movieId, username);
+            if(dto != null){
                 // IMPLEMENT DELETE FUNCTION
-                return null;
+                return unfavoriteMovie(movieId, username);
             }
             int favoritesId = jdbcTemplate.queryForObject(sql, Integer.class, username, movieId, false);
             if(favoritesId != 0) {
-                MovieDto dto = getFavoriteMovie(movieId, username);
-                movieDto.setWatched(dto.isWatched());
-                movieDto.setRank(dto.getRank());
-                movieDto.setFavorited(dto.isFavorited());
+                MovieDto movieDto = movieService.getMovie(movieId);
+//                MovieDto dto = getFavoriteMovie(movieId, username);
+                movieDto.setWatched(false);
+                movieDto.setFavorited(true);
                 return movieDto;
             }
             else {
@@ -92,6 +92,29 @@ public class JdbcMovieDao implements MovieDao{
         } catch(DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException(e.getMessage());
         }
+    }
+
+    public MovieDto unfavoriteMovie(int movieId, String username) {
+        String sql = "DELETE FROM favorites " +
+                "WHERE movie_id = ? AND user_id = (SELECT user_id FROM users WHERE username = ?);";
+        try{
+            int rowsAffected = jdbcTemplate.update(sql, movieId, username);
+            if(rowsAffected != 0) {
+                MovieDto movieDto = movieService.getMovie(movieId);
+                movieDto.setWatched(false);
+                movieDto.setFavorited(false);
+                return movieDto;
+            }
+            else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+        } catch(CannotGetJdbcConnectionException e) {
+            throw new CannotGetJdbcConnectionException("Could not connect to data source");
+        } catch(BadSqlGrammarException e) {
+            throw new BadSqlGrammarException(e.getMessage(), sql, e.getSQLException());
+        } catch(DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException(e.getMessage());
+        }
 
     }
 
@@ -100,6 +123,7 @@ public class JdbcMovieDao implements MovieDao{
         movieDto.setFavorited(true);
         movieDto.setRank(sqlRowSet.getInt("rank"));
         movieDto.setWatched(sqlRowSet.getBoolean("watched"));
+        movieDto.setMovieId(sqlRowSet.getInt("movie_id"));
         return movieDto;
     }
 
