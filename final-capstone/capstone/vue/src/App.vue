@@ -29,26 +29,42 @@
       <!-- <router-link id="logout-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link> -->
 
     </div>
+    <LoadingScreen v-if="loading" />
+    <div v-else>
     <router-view/>
     <footer>
       &copy; 2023 - CinemaCrush.com
     </footer>
   </div>
+  </div>
 </template>
 
 <script>
+
+import LoadingScreen from './components/Loading.vue'
+
 export default {
   data() {
     return {
-      isMenuOpen: false
+      isMenuOpen: false,
+      loading: true
     };
   },
   methods: {
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
     }
+  },
+mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 5000); // Display loading screen for 2 seconds
+  },
+  components: {
+    LoadingScreen
   }
 };
+
 </script>
 
 

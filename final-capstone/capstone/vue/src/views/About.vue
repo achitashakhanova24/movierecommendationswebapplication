@@ -55,7 +55,7 @@ p{
   background-image: radial-gradient(
     circle at center,
     transparent 0%,
-    rgba(0, 0, 0, 0.9) 60%
+    rgba(0, 0, 0, 0.7) 60%
   );
   z-index: -1;
 }

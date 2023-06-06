@@ -72,7 +72,7 @@ const router = new Router({
       name: "favorites",
       component: Favorites,
       meta: {
-        requiresAuth: false
+        requiresAuth: true
       }
     },
     {
@@ -80,7 +80,7 @@ const router = new Router({
       name: "recommendations",
       component: Recommendations,
       meta: {
-        requiresAuth: false
+        requiresAuth: true
       }
     },
     {
@@ -88,7 +88,7 @@ const router = new Router({
       name: "profile",
       component: Profile,
       meta: {
-        requiresAuth: false
+        requiresAuth: true
       }
     },
     {
@@ -96,7 +96,7 @@ const router = new Router({
       name: "movie-list",
       component: MovieList,
       meta: {
-        requiresAuth: false
+        requiresAuth: true
       }
     },
     {
@@ -104,7 +104,7 @@ const router = new Router({
       name: "movie-details",
       component: MovieDetails,
       meta: {
-        requiresAuth: false
+        requiresAuth: true
       }
     },
   ]
