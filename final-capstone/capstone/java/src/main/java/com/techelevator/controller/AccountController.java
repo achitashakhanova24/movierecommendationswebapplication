@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 
+
 @RestController
 @RequestMapping(path = "/account")
 @PreAuthorize("isAuthenticated()")
+@CrossOrigin
 public class AccountController {
     private AccountDao dao;
 

@@ -272,6 +272,7 @@ public class MovieService {
     }
 
 
+
     public List<MovieTableDto> mapResultSetToDto(JsonNode jsonNode){
         List<MovieTableDto> movies = new ArrayList<>();
         for (int i = 0; i < jsonNode.size(); i++) {

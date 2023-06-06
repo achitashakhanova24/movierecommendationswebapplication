@@ -64,4 +64,29 @@ public class MovieController {
     public ResponseEntity<MovieDto> favoriteMovie(@PathVariable int movieId, Principal principal){
         return new ResponseEntity<>(movieDao.favoriteMovie(movieId, principal.getName()), HttpStatus.CREATED);
     }
+
+    @GetMapping("/myFavorites")
+    public ResponseEntity<List <MovieDto>> favoriteList(Principal principal){
+        return new ResponseEntity<>(movieDao.getFavorites(principal.getName()), HttpStatus.OK);
+    }
+
+    @GetMapping("/myWatchList")
+    public ResponseEntity <List <MovieDto>> watchList(Principal principal){
+        return new ResponseEntity<>(movieDao.getWatchList(principal.getName()), HttpStatus.OK);
+    }
+
+    @PutMapping("/editWatched/{movieId}")
+    public ResponseEntity<MovieDto> editWatched(@PathVariable int movieId, Principal principal){
+        return new ResponseEntity<>(movieDao.updateWatched(movieId, principal.getName()), HttpStatus.OK);
+    }
+
+    @GetMapping("/mySeenList")
+    public ResponseEntity <List <MovieDto>> seenList(Principal principal){
+        return new ResponseEntity<>(movieDao.getSeenList(principal.getName()), HttpStatus.OK);
+    }
+
+    @PutMapping("/updateRank/{movieId}/{rank}")
+    public ResponseEntity<List <MovieDto>> updateRank(@PathVariable int movieId, @PathVariable int rank, Principal principal){
+        return new ResponseEntity<>(movieDao.updateRank(movieId, rank, principal.getName()), HttpStatus.OK);
+    }
 }
