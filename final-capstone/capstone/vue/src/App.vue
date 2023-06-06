@@ -21,6 +21,8 @@
       <li><router-link id="logout-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link></li>
 
     </ul>
+
+    <div class="vignette"> </div>
   </div>
       
       <!-- <router-link id="home-link" v-bind:to="{ name: 'home' }"><i class="fas fa-home"></i></router-link>&nbsp;|&nbsp; -->
@@ -175,4 +177,18 @@ export default {
  router-view {
    background-color: transparent;
  }
+ .vignette{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 7px;
+  background-image: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.9) 60%
+  );
+  z-index: -1;
+}
 </style>

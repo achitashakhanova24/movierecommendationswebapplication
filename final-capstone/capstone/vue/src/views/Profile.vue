@@ -2,6 +2,7 @@
   <div class="profilePage" @click="handleClick">
       <h1>Profile</h1>
       <div class="profileInfo">
+            <div class="vignette"></div>
           <div>
               <h3>Username: {{ username }}      </h3>
               <!-- <p>{{ username }}</p> -->
@@ -57,5 +58,18 @@ h3 {
     background-color: rgba(0, 0, 0, 0.8);
     font-weight: 0;
 }
-
+.vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 7px;
+  background-image: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.7) 60%
+  );
+  z-index: -1;
+}
 </style>
