@@ -83,6 +83,7 @@ public class MovieService {
             movie.setGenres(genreList);
             movie.setMovieId(jsonNode.path("id").asInt());
             movie.setPosterPath(jsonNode.path("poster_path").asText());
+            movie.setBackdropPath(jsonNode.path("backdrop_path").asText());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -201,73 +202,67 @@ public class MovieService {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode;
         ResponseEntity<String> responseEntity = null;
-        if(searchTitle != null) {
-           responseEntity = restTemplate.exchange(MOVIE_API + "/search/movie" + "?api_key=" + KEY + "&query=" + searchTitle + "&sort_by=vote_average.desc", HttpMethod.GET, entity, String.class);
-        }
-        else if(searchGenre != null && releaseDate != null && language != null) {
-            int genreId = 0;
-                for (Integer key : genreIdToName.keySet() ) {
-                    if(genreIdToName.get(key).equalsIgnoreCase(searchGenre)){
+        for(int i = 1; i <= 20; i++) {
+            if (searchTitle != "") {
+                responseEntity = restTemplate.exchange(MOVIE_API + "/search/movie" + "?api_key=" + KEY + "&query=" + searchTitle + "&sort_by=vote_average.desc" + "&page=" + i, HttpMethod.GET, entity, String.class);
+            } else if (searchGenre != "" && releaseDate != null && language != "") {
+                int genreId = 0;
+                for (Integer key : genreIdToName.keySet()) {
+                    if (genreIdToName.get(key).equalsIgnoreCase(searchGenre)) {
                         genreId = key;
                     }
                 }
 
-            responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&with_genres=" + genreId + "&primary_release_date.gte=" + releaseDate + "&language=" + language + "&sort_by=vote_average.desc", HttpMethod.GET, entity, String.class);
-        }
-        else if(searchGenre != null && releaseDate != null){
-            int genreId = 0;
-                for (Integer key : genreIdToName.keySet() ) {
-                    if(genreIdToName.get(key).equalsIgnoreCase(searchGenre)){
+                responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&with_genres=" + genreId + "&primary_release_date.gte=" + releaseDate + "&language=" + language + "&sort_by=vote_average.desc" + "&page=" + i, HttpMethod.GET, entity, String.class);
+            } else if (searchGenre != "" && releaseDate != null) {
+                int genreId = 0;
+                for (Integer key : genreIdToName.keySet()) {
+                    if (genreIdToName.get(key).equalsIgnoreCase(searchGenre)) {
                         genreId = key;
                     }
                 }
 
-            responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&with_genres=" + genreId + "&primary_release_date.gte=" + releaseDate + "&sort_by=vote_average.desc", HttpMethod.GET, entity, String.class);
-        }
-        else if(releaseDate != null && language != null){
-            responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&primary_release_date.gte=" + releaseDate + "&language=" + language + "&sort_by=vote_average.desc", HttpMethod.GET, entity, String.class);
-        }
-        else if(searchGenre != null && language != null){
-            int genreId = 0;
-            for (Integer key : genreIdToName.keySet() ) {
-                if(genreIdToName.get(key).equalsIgnoreCase(searchGenre)){
-                     genreId = key;
+                responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&with_genres=" + genreId + "&primary_release_date.gte=" + releaseDate + "&sort_by=vote_average.desc" + "&page=" + i, HttpMethod.GET, entity, String.class);
+            } else if (releaseDate != null && language != "") {
+                responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&primary_release_date.gte=" + releaseDate + "&language=" + language + "&sort_by=vote_average.desc" + "&page=" + i, HttpMethod.GET, entity, String.class);
+            } else if (searchGenre != "" && language != "") {
+                int genreId = 0;
+                for (Integer key : genreIdToName.keySet()) {
+                    if (genreIdToName.get(key).equalsIgnoreCase(searchGenre)) {
+                        genreId = key;
+                    }
                 }
+
+                responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&with_genres=" + genreId + "&language=" + language + "&sort_by=vote_average.desc" + "&page=" + i, HttpMethod.GET, entity, String.class);
+            } else if (releaseDate != null) {
+                int genreId = 0;
+                if (searchGenre != null) {
+                    for (Integer key : genreIdToName.keySet()) {
+                        if (genreIdToName.get(key).equalsIgnoreCase(searchGenre)) {
+                            genreId = key;
+                        }
+                    }
+                }
+                responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&primary_release_date.gte=" + releaseDate + "&sort_by=vote_average.desc" + "&page=" + i, HttpMethod.GET, entity, String.class);
+            } else if (searchGenre != "") {
+                int genreId = 0;
+                for (Integer key : genreIdToName.keySet()) {
+                    if (genreIdToName.get(key).equalsIgnoreCase(searchGenre)) {
+                        genreId = key;
+                    }
+                }
+                responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&with_genres=" + genreId + "&sort_by=vote_average.desc" + "&page=" + i, HttpMethod.GET, entity, String.class);
+            } else if (language != "") {
+                responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&language=" + language + "&sort_by=vote_average.desc" + "&page=" + i, HttpMethod.GET, entity, String.class);
             }
-
-            responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&with_genres=" + genreId + "&language=" + language + "&sort_by=vote_average.desc", HttpMethod.GET, entity, String.class);
-        }
-        else if(releaseDate != null){
-            int genreId = 0;
-            if(searchGenre != null) {
-                for (Integer key : genreIdToName.keySet() ) {
-                    if(genreIdToName.get(key).equalsIgnoreCase(searchGenre)){
-                        genreId = key;
-                    }
-                }
+            try {
+                jsonNode = mapper.readTree(responseEntity.getBody()).path("results");
+                movies.addAll(mapResultSetToDto(jsonNode));
+            } catch (JsonMappingException e) {
+                e.printStackTrace();
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
             }
-            responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&primary_release_date.gte=" + releaseDate + "&sort_by=vote_average.desc", HttpMethod.GET, entity, String.class);
-        }
-        else if(searchGenre != null){
-            int genreId = 0;
-                for (Integer key : genreIdToName.keySet() ) {
-                    if(genreIdToName.get(key).equalsIgnoreCase(searchGenre)){
-                        genreId = key;
-                    }
-                }
-            responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&with_genres=" + genreId + "&sort_by=vote_average.desc", HttpMethod.GET, entity, String.class);
-        }
-        else if(language != null){
-            responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&language=" + language + "&sort_by=vote_average.desc", HttpMethod.GET, entity, String.class);
-        }
-        try{
-            jsonNode = mapper.readTree(responseEntity.getBody()).path("results");
-            movies = mapResultSetToDto(jsonNode);
-            return movies;
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
         }
         return movies;
     }

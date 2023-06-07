@@ -11,31 +11,39 @@
       </head>
       <br>
       <h1>My Lists</h1>
-      <p class="description">
-        FAVORITE MOVIES - WATCH LIST - SEEN LIST
-      </p>
-      <!-- <div class='favoriteMovies'>
-        <ul>
-            <li v-for="movie in favoriteMovies" :key="movie.movieId">
-               {{movie.rank}} {{movie.title}} {{movie.genres}} 
-            </li>
-        </ul>
-    </div>
-    <div class='watchList'>
-        <ul>
-            <li v-for="movie in favoriteMovies" :key="movie.movieId">
-               {{movie.rank}} {{movie.title}} {{movie.genres}} 
-            </li>
-        </ul>
-    </div>
-    <div class='seenList'>
-        <ul>
-            <li v-for="movie in seenList" :key="movie.movieId">
-               {{movie.rank}} {{movie.title}} {{movie.genres}} 
-            </li>
-        </ul>
-    </div> -->
-      <div class="favoriteCarousel">
+      <h3 class="favoritesHeader">
+        FAVORITE MOVIES
+      </h3>
+      <div class="favorites">
+      <b-card
+        v-for="movie in favoriteMovies"
+        :key="movie.movieId"
+        :title="'#' + movie.rank + ' - ' + movie.title"
+        :img-src="movie.backdropPath"
+        img-onerror="this.src ='images/default-backdrop.jpg'"
+        img-alt="Image unavailable"
+        img-top
+        tag="article"
+        style="max-width: 20rem;"
+        class="mb-2"
+      >
+      <b-card-text>
+        {{movie.description}}
+        <br>
+        Watched: {{movie.watched}}
+      </b-card-text>
+      <span class="favorites-buttons">
+            <b-button id="update-watched-button" v-on:click="updateWatchedStatus(movie.movieId)" variant="primary">Mark Watched</b-button><b-button id="update-rank-button" v-on:click="updateWatchedStatus(movie.movieId)" variant="primary">Change Rank</b-button>
+
+      </span>
+  </b-card>
+  
+</div>
+      <h3 class="watchListHeader">
+          WATCH LIST
+        </h3>
+      <div class="watchListCarousel">
+        
         <b-carousel
           id="carousel-1"
           v-model="slide"
@@ -49,61 +57,40 @@
           @sliding-start="onSlideStart"
           @sliding-end="onSlideEnd"
         >
-          <!-- Text slides with image -->
           <b-carousel-slide
-            v-for="movie in favoriteMovies"
-            v-bind:key="movie.id"
+            v-for="movie in watchList"
+            v-bind:key="movie.movieId"
             class="carousel-item"
             :img-src="movie.posterPath"
             :img-alt="movie.title"
           >
           </b-carousel-slide>
-
-          <!-- Slides with custom text -->
+        </b-carousel>
+      </div>
+      <h3 class="seenListHeader">
+        SEEN LIST
+      </h3>
+      <div class="seenListCarousel">
+        <b-carousel
+          id="carousel-2"
+          v-model="slide"
+          :interval="4000"
+          controls
+          indicators
+          background="#ababab"
+          img-width="1024"
+          img-height="480"
+          style="text-shadow: 1px 1px 2px #333"
+          @sliding-start="onSlideStart"
+          @sliding-end="onSlideEnd"
+        >
           <b-carousel-slide
-            v-for="movie in newReleases"
+            v-for="movie in seenList"
             v-bind:key="movie.id"
             class="carousel-item"
             :img-src="movie.posterPath"
             :img-alt="movie.title"
           >
-          </b-carousel-slide>
-
-          <!-- Slides with image only -->
-          <b-carousel-slide
-            v-for="movie in newReleases"
-            v-bind:key="movie.id"
-            class="carousel-item"
-            :img-src="movie.posterPath"
-            :img-alt="movie.title"
-          >
-          </b-carousel-slide>
-
-          <!-- Slides with img slot -->
-          <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
-          <b-carousel-slide>
-            <template #img>
-              <img
-                class="d-block img-fluid w-100"
-                width="1024"
-                height="480"
-                src="https://picsum.photos/1024/480/?image=55"
-                alt="image slot"
-              />
-            </template>
-          </b-carousel-slide>
-
-          <!-- Slide with blank fluid image to maintain slide aspect ratio -->
-          <b-carousel-slide
-            caption="Blank Image"
-            img-blank
-            img-alt="Blank image"
-          >
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse eros felis, tincidunt a tincidunt eget, convallis vel
-              est. Ut pellentesque ut lacus vel interdum.
-            </p>
           </b-carousel-slide>
         </b-carousel>
       </div>
@@ -133,37 +120,43 @@ export default {
     },
     onSlideEnd(slide) {
         this.sliding = false
-      }
+    },
+    updateWatchedStatus(movieId){
+      movieService.editWatchedStatus(movieId).then(response => {
+        this.favoriteMovies.forEach(movie => {
+          if(movie.movieId === response.data.movieId) {
+            movie.watched = response.data.watched;
+          }
+        })
+      })
+    }
     },
     created(){
-        movieService.getFavorites()
-        .then(response => {
-            response.data.forEach((currentMovie) => {
-        this.favoriteMovies.push(currentMovie);
-      });
-        }),
-       movieService.getWatchList()
-       .then(response => {
-           response.data.forEach(currentMovie => {
-               this.watchList.push(currentMovie)
-           })
-       }),
-       movieService.getSeenList()
-       .then(response => {
-           response.data.forEach(currentMovie => {
-               this.seenList.push(currentMovie)
-           })
-       }),
-        movieService.getFavorites.then(response => {
-      this.favoriteMovies = response.data.filter(movie => {
-        return movie.posterPath != "null";
-      });
-      this.favoriteMovies.forEach(movie => {
-        movie.posterPath = "https://image.tmdb.org/t/p/w500/" + movie.posterPath;
+      movieService.getWatchList().then(response => {
+        response.data.forEach(movie => {
+          if(movie.posterPath != "null") {
+            movie.posterPath = "https://image.tmdb.org/t/p/w780/" + movie.posterPath;
+          }
+          this.watchList.push(movie);
+      })
+    }),
+      movieService.getSeenList().then(response => {
+        response.data.forEach(movie => {
+          if(movie.posterPath != "null") {
+            movie.posterPath = "https://image.tmdb.org/t/p/w780/" + movie.posterPath;
+          }
+          this.seenList.push(movie);
+      })
+    }),
+      movieService.getFavorites().then(response => {
+        response.data.forEach(movie => {
+          if(movie.backdropPath != "null") {
+            movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
+          }
+          this.favoriteMovies.push(movie);
       })
     })
-
-}
+  }
 }
 </script>
 
@@ -185,24 +178,64 @@ export default {
     "header"
     "description"
     "favoriteMovies"
+    "favoriteMovies"
     "watchList"
     "seenList";
-  grid-template-rows: 0fr 0fr 3fr 3fr 3fr;
+  grid-template-rows: 5fr 0fr 3fr 3fr 3fr;
+  font-family: 'Paytone One', sans-serif;
+  overflow-y: auto;
 }
 /* .content{
     color: white; */
 
-p {
+h3 {
   grid-area: "description";
   color: white;
+  text-align: center;
+  background-color: rgba(255, 49, 49, 0.644);
+  margin-top: 70px;
+  margin-bottom: 70px;
+  height: 65px;
+  /* width: 500px; */
+  font-size: 3rem;
 }
 h1 {
   grid-area: "header";
-  color: white;
+  color: rgb(255, 49, 49);
+  text-align: center;
+  font-family: 'Showtime';
+  font-size: 5rem;
+  margin-top: 20px;
+  
 }
 
-.favoriteMovies {
+.watchListHeader {
+  margin-top: 60px;
+}
+
+.favorites {
   grid-area: "favoriteMovies";
+  display: flex;
+  gap: 10px;
+  height: 100%;
+  color: black;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+/* .favorites-buttons > button {
+  position: absolute;
+  bottom: 0;
+  left: 5px;
+} */
+
+.card-text {
+  color: black;
+}
+
+article {
+  height: 700px;
 }
 
 .watchList {
@@ -211,5 +244,27 @@ h1 {
 
 .seenList {
   grid-area: "seenList";
+}
+
+.favorites-buttons {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  gap: 5px;
+}
+
+#carousel-1, #carousel-2 {
+  height: 700px;
+  width: 500px;
+}
+
+.watchListCarousel, .seenListCarousel{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+img:before {
+  background-image: "../../images/default-backdrop.jpg";
 }
 </style>

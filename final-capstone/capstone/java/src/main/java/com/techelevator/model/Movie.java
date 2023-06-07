@@ -15,6 +15,7 @@ public class Movie {
     private String description;
     private String posterPath;
 
+
     public Movie(int movieId, String title, String language, List<String> listOfGenres, int runtime, Date releaseDate, String description, String posterPath) {
         this.title = title;
         this.language = language;

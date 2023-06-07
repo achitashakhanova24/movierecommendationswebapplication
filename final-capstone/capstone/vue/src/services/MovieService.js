@@ -38,6 +38,22 @@ export default {
 
     // return axios.get('/api/movies', { params });
     return axios.get(`/movie/list`);
+  },
+
+  editWatchedStatus(movieId) {
+    return axios.put(`/movie/editWatched/${movieId}`);
+  },
+
+  searchMovies(title, genre, date, language) {
+     const queryParams = {
+      title: title,
+      genre: genre,
+      date: date,
+      language: language
+    };
+    const params = new URLSearchParams(queryParams);
+
+    return axios.get('/movie/search', {params});
   }
 
 }
