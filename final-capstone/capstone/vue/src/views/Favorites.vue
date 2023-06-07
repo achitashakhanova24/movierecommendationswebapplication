@@ -9,9 +9,10 @@
           crossorigin="anonymous"
         />
       </head>
-      <h1>Top 10 Movies (Can Change)</h1>
+      <br>
+      <h1>My Lists</h1>
       <p class="description">
-        These are my favorite movies that I have seen. (CHANGE)
+        FAVORITE MOVIES - WATCH LIST - SEEN LIST
       </p>
       <!-- <div class='favoriteMovies'>
         <ul>

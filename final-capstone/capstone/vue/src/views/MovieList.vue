@@ -116,7 +116,7 @@ export default {
         console.log(item);
         console.log(index);
          console.log(event);
-         this.$router.push({name:'movie-details', params:{id: item.title}})
+         this.$router.push({name:'movie-details', params:{id: item.movieId}})
       },
     getPage(page) {
       if (!this.isAuthenticated) {

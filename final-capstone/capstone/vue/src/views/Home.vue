@@ -109,7 +109,7 @@ p{
   font-size: 42px;
 }
   h1{
-    color: #ffffff;
+    color: whitesmoke;
     font-size: 58px;
     font-family: 'Showtime';
     transform: scaleX(1.43);

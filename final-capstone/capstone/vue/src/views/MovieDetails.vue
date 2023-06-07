@@ -1,15 +1,35 @@
 <template>
   <div class="detailsPage">
       <div class="vignette"></div>
-   <h1>Details</h1>
-   <p>**PLACEHOLDER**</p>
+   <h1>Movie Details</h1>
+   <p>Spider-Man: Across the Spider-Verse</p>
+   <p>Description: After reuniting with Gwen Stacy, Brooklyn’s full-time, friendly neighborhood Spider-Man is catapulted across the Multiverse, where he encounters the Spider Society, a team of Spider-People charged with protecting the Multiverse’s very existence. But when the heroes clash on how to handle a new threat, Miles finds himself pitted against the other Spiders and must set out on his own to save those he loves most.</p>
   </div>
 </template>
 
 <script>
-export default {
+import movieService from "../services/MovieService";
 
-}
+export default {
+  name: "movie-details",
+  data() {
+    return {
+      movie: null
+
+    };
+  },
+  created() {
+    const movieId = this.$route.params.id;
+    console.log(movieId);
+    movieService.getMovieDetails(movieId)
+    .then(response => {
+      this.movie = response.data;
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }
+};
 </script>
 
 <style scoped>
