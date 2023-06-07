@@ -10,6 +10,22 @@ export default {
     return axios.get(`/movie/${movieId}`)
   },
 
+  getProfile(){
+    return axios.get('/account')
+  },
+
+  getFavorites(){
+    return axios.get('/movie/myFavorites')
+  }, 
+
+  getWatchList(){
+    return axios.get('/movie/myWatchList')
+  },
+
+  getSeenList(){
+    return axios.get('/movie/mySeenList')
+  },
+
      getPageOfMovies() {
 
     // const params = {

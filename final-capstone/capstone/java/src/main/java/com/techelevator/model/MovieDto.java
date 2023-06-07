@@ -10,6 +10,7 @@ public class MovieDto {
     private boolean favorited;
     private boolean watched;
     private int rank;
+    
 
     public MovieDto(String title, String genres, String releaseDate, String description, String language, int movieId, boolean favorited, boolean watched, int rank){
         this.title = title;

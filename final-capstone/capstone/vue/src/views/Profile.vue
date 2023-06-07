@@ -1,5 +1,5 @@
 <template>
-  <div class="profilePage" @click="handleClick">
+  <div class="profilePage">
       <h1>Profile</h1>
       <div class="profileInfo">
             <div class="vignette"></div>
@@ -16,18 +16,26 @@
 </template>
 
 <script>
+import movieService from '../services/MovieService';
 export default {
     data() {
         return {
-            username: 'Kelvin',
-            email: 'kelvinTE@example.com',
+            username: '',
+            email: '',
         };
     },
-    methods: {
-        handleClick(){
-
+   
+    created(){
+            movieService.getProfile() 
+      .then(response => {
+        this.username = response.data.username;
+        this.email = response.data.email;
+      })
+      .catch(error => {
+        console.log(error);
+      });
         }
-    }
+    
 }
 </script>
 

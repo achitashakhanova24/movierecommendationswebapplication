@@ -7,6 +7,7 @@ public class Account {
     private int accountId;
     private int userId;
     private String email;
+    private String username;
 
     public Account(){}
 
@@ -14,6 +15,14 @@ public class Account {
         this.accountId = accountId;
         this.userId = userId;
         this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {

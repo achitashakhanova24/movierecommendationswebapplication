@@ -32,12 +32,15 @@ public class JdbcAccountDao implements AccountDao{
 
     @Override
     public Account getAccountByUserId(int userId) {
-        String sql = "SELECT * FROM accounts WHERE user_id = ?";
+        String sql = "SELECT u.user_id, u.username, a.user_id, a.email FROM accounts a " +
+                "JOIN users u ON u.user_id = a.user_id " +
+                "WHERE user_id = ?";
 
         try {
             SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, userId);
             if(rowSet.next()) {
                 Account acc = mapRowToAccount(rowSet);
+                acc.setUsername(rowSet.getString("username"));
                 return acc;
             }
             else {
@@ -78,7 +81,9 @@ public class JdbcAccountDao implements AccountDao{
         try {
             SqlRowSet rowset = jdbcTemplate.queryForRowSet(sql, username);
             if(rowset.next()) {
-                return mapRowToAccount(rowset);
+                Account account = mapRowToAccount(rowset);
+                account.setUsername(username);
+                return account;
             }
             else {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
