@@ -10,9 +10,10 @@ public class MovieDto {
     private boolean favorited;
     private boolean watched;
     private int rank;
+    private String posterPath;
     
 
-    public MovieDto(String title, String genres, String releaseDate, String description, String language, int movieId, boolean favorited, boolean watched, int rank){
+    public MovieDto(String title, String genres, String releaseDate, String description, String language, int movieId, boolean favorited, boolean watched, int rank,String posterPath){
         this.title = title;
         this.genres = genres;
         this.releaseDate = releaseDate;
@@ -22,9 +23,18 @@ public class MovieDto {
         this.favorited = favorited;
         this.watched = watched;
         this.rank = rank;
+        this.posterPath = posterPath;
     }
 
     public MovieDto(){}
+
+    public String getPosterPath() {
+        return posterPath;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
 
     public int getMovieId() {
         return movieId;

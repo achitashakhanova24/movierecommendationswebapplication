@@ -82,6 +82,7 @@ public class MovieService {
             movie.setDescription(jsonNode.path("overview").asText());
             movie.setGenres(genreList);
             movie.setMovieId(jsonNode.path("id").asInt());
+            movie.setPosterPath(jsonNode.path("poster_path").asText());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
