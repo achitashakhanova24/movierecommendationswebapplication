@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    
     <head>
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -8,7 +9,7 @@
     </head>
     <div id="nav">
       
-<div class="ellipsis-menu">
+<div class="ellipsis-menu"> 
     <div class="menu-icon" @click="toggleMenu"><i class="fas fa-ellipsis-h"></i></div>
     <ul class="menu" v-if="isMenuOpen">
       <br>
@@ -21,10 +22,11 @@
       <li><router-link id="logout-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link></li>
 
     </ul>
-
-    <div class="vignette"> </div>
   </div>
-      
+  <div class="title">CinemaCrush</div>
+
+          <div class="vignette"> </div>
+
       <!-- <router-link id="home-link" v-bind:to="{ name: 'home' }"><i class="fas fa-home"></i></router-link>&nbsp;|&nbsp; -->
       <!-- <router-link id="logout-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link> -->
 
@@ -69,6 +71,18 @@ mounted() {
 
 
 <style>
+.title {
+  position: absolute;
+    top: 0;
+    right: 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: whitesmoke;
+    font-weight: bold;
+    font-size: 20px;
+    z-index: 9999;
+}
 .ellipsis-menu {
   position: relative;
   display: inline-block;

@@ -1,6 +1,9 @@
 <template>
+
 <div id="app">
+  <div class="vignette"></div>
   <div id="register" class="text-center">
+    
     <form @submit.prevent="register">
       <h1>Create Account</h1>
       <div class="alert" role="alert" v-if="registrationErrors">
@@ -98,7 +101,7 @@ label {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 70vh;
   position: relative;
   margin-top: 160px;
 }

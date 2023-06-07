@@ -1,9 +1,12 @@
 <template>
   <div class="detailsPage">
       <div class="vignette"></div>
-   <h1>Movie Details</h1>
-   <p>Spider-Man: Across the Spider-Verse</p>
-   <p>Description: After reuniting with Gwen Stacy, Brooklyn’s full-time, friendly neighborhood Spider-Man is catapulted across the Multiverse, where he encounters the Spider Society, a team of Spider-People charged with protecting the Multiverse’s very existence. But when the heroes clash on how to handle a new threat, Miles finds himself pitted against the other Spiders and must set out on his own to save those he loves most.</p>
+   <h1>{{this.$route.params.id}}</h1>
+   <h2>{{this.$route.params.rating}}/10</h2>
+   <h3>Release Date: {{this.$route.params.releaseDate}}</h3>
+   <p>{{this.$route.params.description}}</p>
+  
+   <p></p>
   </div>
 </template>
 
@@ -65,9 +68,15 @@ export default {
 
 
 h1{
-    color: white
+    color: white;
+}
+h2{
+  color: white;
+}
+h3 {
+  color: white
 }
 p {
-    color: white
+    color: white;
 }
 </style>

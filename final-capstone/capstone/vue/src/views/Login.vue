@@ -3,6 +3,7 @@
     <div class="vignette">
       </div>
     <form @submit.prevent="login">
+      <!-- <h1 class="headline">CinemaCrush</h1> -->
       <h1 >Sign In</h1>
       <div class="alert" role="alert" v-if="invalidCredentials">
         Invalid username and password!
@@ -22,9 +23,9 @@
       <p>
       Need an account?<router-link class="register-link" :to="{ name: 'register' }"> Sign up now</router-link></p>
     </form>
-    <div class="about">
-      <p>Swipe Right for Your Movie Night!</p>
-    </div>
+    <!-- <div class="about">
+      <p>Cinema Crush</p>
+    </div> -->
   </div>
 </template>
 
@@ -67,6 +68,9 @@ export default {
 </script>
 
 <style scoped>
+.headline {
+  color: white;
+}
 .form-input-group {
   margin-bottom: 1rem;
   display: flex;
