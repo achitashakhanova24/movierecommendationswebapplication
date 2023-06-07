@@ -1,5 +1,7 @@
 <template>
   <div id="login">
+    <div class="vignette">
+      </div>
     <form @submit.prevent="login">
       <h1 >Sign In</h1>
       <div class="alert" role="alert" v-if="invalidCredentials">

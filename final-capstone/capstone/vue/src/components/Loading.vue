@@ -26,7 +26,7 @@
   background-image: radial-gradient(
     circle at center,
     transparent 0%,
-    rgba(0, 0, 0, 0.7) 60%
+    rgba(0, 0, 0, 0.7) 25%
   );
   z-index: 9999;
 }

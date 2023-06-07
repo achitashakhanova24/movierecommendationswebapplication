@@ -4,9 +4,10 @@
     <head>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     </head>
-    <h1>CinemaCrush</h1>
+    <br>
+    <h1>Cinema_Crush</h1>
     
-    <p> Swipe Right for Your Movie Night!</p>
+    <!-- <p> Swipe Right for Your Movie Night!</p> -->
     <div class="poster-container">
       <div>
         <b-carousel
@@ -110,6 +111,9 @@ p{
   h1{
     color: #ffffff;
     font-size: 58px;
+    font-family: 'Showtime';
+    transform: scaleX(1.43);
+    z-index: -1;
   }
 
   /* .poster-container {
@@ -135,6 +139,11 @@ p{
   }
   b-carousel {
     font-family: 'Paytone One', sans-serif;
+  }
+
+  @font-face {
+    font-family: 'Showtime';
+    src: url('/assets/fonts/Showtime.ttf') format('truetype');
   }
 
 </style>
