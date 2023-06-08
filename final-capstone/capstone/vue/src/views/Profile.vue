@@ -74,6 +74,10 @@ h3 {
     border: solid black;
     background-color: rgba(0, 0, 0, 0.8);
     font-weight: 0;
+    width: 275px;
+    height: 100px
+
+    
 }
 .vignette {
   position: absolute;
