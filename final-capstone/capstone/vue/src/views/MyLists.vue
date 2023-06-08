@@ -10,7 +10,7 @@
         />
       </head>
       <br>
-      <h1>My Lists</h1>
+      <h1>My_Lists</h1>
       <h3 class="favoritesHeader">
         FAVORITE MOVIES &emsp; <router-link id="favorites-link" v-bind:to="{ name: 'favorites'}">View Favorites</router-link>
       </h3>

@@ -1,5 +1,8 @@
 <template>
   <html>
+    <div>
+      <Loading v-if="loading" />
+    
     <!-- <div class="vignette"> -->
     <div class="detailsPage">
       <head>
@@ -40,20 +43,23 @@
    <h3>Release Date: {{this.$route.params.releaseDate}}</h3>
    <p>{{this.$route.params.description}}</p>
    <span>{{movie.rank}}</span> -->
+   
         </div>
-      
+    </div>
     <!-- </div> -->
   </html>
 </template>
 
 <script>
+import Loading from "../components/Loading.vue"
 import movieService from "../services/MovieService";
 
 export default {
   name: "movie-details",
   data() {
     return {
-      movie: null
+      movie: null,
+      loading: true
 
     };
   },
@@ -84,6 +90,9 @@ export default {
         if(this.movie.posterPath != "null") {
           this.movie.posterPath = "https://image.tmdb.org/t/p/w500/" + this.movie.posterPath;
         }
+      })
+      .catch(error => {
+        console.error(error);
       });
     },
     changeWatchedStatus(movieId) {
@@ -97,7 +106,15 @@ export default {
         }
       });
     }
-  }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 1500);
+  },
+  components: {
+    Loading
+  },
 };
 </script>
 
