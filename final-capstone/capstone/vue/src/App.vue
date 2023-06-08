@@ -60,7 +60,7 @@ export default {
 mounted() {
     setTimeout(() => {
       this.loading = false;
-    }, 5000); // Display loading screen for 2 seconds
+    }, 2000); // Display loading screen for 2 seconds
   },
   components: {
     LoadingScreen
