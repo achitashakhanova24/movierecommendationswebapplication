@@ -1,5 +1,7 @@
 <template>
 <html>
+  <div>
+    <Loading v-if="loading" />
   <div class="vignette"> </div>
   <div class="AboutUs" @click="handleClick">
     <head>
@@ -44,18 +46,30 @@
     </div>
     
  </div>
+ </div>
  </html>
 </template>
 
 <script>
+import Loading from "../components/Loading.vue"
+
 export default {
   data() {
     return {
-      mainProps: { width: 150, height: 150, class: 'm1' }
+      mainProps: { width: 150, height: 150, class: 'm1' },
+      loading: true
     }
   },
   methods: {
     handleClick() {},
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 1500);
+  },
+  components: {
+    Loading
   },
 };
 </script>
