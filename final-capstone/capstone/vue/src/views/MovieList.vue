@@ -2,6 +2,9 @@
 <template>
 
 <html lang="en">
+<div>
+<Loading v-if="loading" />
+
     <div class="movie-list">
         <div class="vignette"></div>
         <head>
@@ -48,13 +51,14 @@
             aria-controls="my-table"
             ></b-pagination>
         </div>
-        
+        </div>
     </div>
     </html>
 </template>
 <script src="js/jquery-1.7.1.min.js"></script>
 <script src="js/bootstrap.js"></script>
 <script>
+import Loading from "../components/Loading.vue"
 import movieService from "../services/MovieService";
 
 export default {
@@ -68,7 +72,8 @@ export default {
             filterTitle: '',
             filterGenre: '',
             filterDate: '',
-            filterLanguage: ''
+            filterLanguage: '',
+            loading: true
         };
     },
     created() {
@@ -142,8 +147,15 @@ export default {
             })
             this.currentPage = 1;
         }
-    }
-
+    },
+    mounted() {
+        setTimeout(() => {
+            this.loading = false;
+        }, 1500);
+    },
+components: {
+    Loading
+},
 }
 </script>
 

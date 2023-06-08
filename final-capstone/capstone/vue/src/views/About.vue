@@ -8,7 +8,7 @@
         </head>
     
     <h1 >About Us</h1>
-    <h2> Introducing CinemaCrush: Where Movie Matches Are Made! </h2>
+     <h2> Introducing CinemaCrush: Where Movie Matches Are Made! </h2>
     <p>
       <!-- Are you tired of endlessly swiping through potential "soulmates" on dating apps, only to end up disappointed? 
       What if we told you there's an app that can match you with your perfect movie instead? Get ready for a cinematic journey like no other! -->
