@@ -86,6 +86,7 @@ export default {
             })
         })
         console.log(this.movies);
+        console.log(this.movieIds)
         // movieService.getPageOfMovies(1).then(response => {
         //     console.log(response.data);
         //     return this.movies = response.data;
@@ -96,10 +97,10 @@ export default {
         console.log(this.movies.indexOf(item));
         console.log(item);
         console.log(index);
-         console.log(event);
+        console.log(this.movies.indexOf(item));
          this.$router.push({
            name:'movie-details', params:{
-                id: this.movieIds[index],
+                id: this.movieIds[this.movies.indexOf(item)],
                 title: item.title,
                 rating: item.rating,
                 genre: item.genres,
