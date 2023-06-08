@@ -26,6 +26,7 @@
         tag="article"
         style="max-width: 20rem;"
         class="mb-2"
+        blank-color="#777"
       >
       <b-card-text>
         <b-button id="details-button" v-on:click="getMovieDetails(movie)" variant="primary">Details</b-button>
