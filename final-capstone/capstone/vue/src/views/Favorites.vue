@@ -28,7 +28,7 @@
         class="mb-2"
       >
       <b-card-text>
-        <b-button id="details-button" v-on:click="getMovieDetails(movie.movieId)" variant="primary">Details</b-button>
+        <b-button id="details-button" v-on:click="getMovieDetails(movie)" variant="primary">Details</b-button>
         <b-button v-on:click="updateWatchedStatus(movie.movieId)" v-if="!movie.watched" id="not-watched-button"><b-icon style="color: black; border-radius: 10px;" icon="binoculars" aria-label="Help"></b-icon></b-button>
         <b-button v-on:click="updateWatchedStatus(movie.movieId)" v-if="movie.watched" id="watched-button"><b-icon style="color: black; border-radius: 10px;" icon="binoculars-fill" aria-label="Help"></b-icon></b-button>
         <br><br><br>
