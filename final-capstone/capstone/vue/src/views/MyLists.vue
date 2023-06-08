@@ -44,7 +44,7 @@
               </template>
               <div class="d-block text-center">
                 <div v-for="movie in favoriteMovies" :key="movie.movieId">
-                  <a variant="light" id="update-rank-button" v-on:click="updateWatchedStatus(movie.movieId)">{{movie.title}}</a>&emsp;&emsp;<b-button id="update-rank-button" v-on:click="updateRank(targetFavorite, movie.rank)" variant="light">{{movie.rank}}</b-button>
+                  <a variant="light" id="update-rank-button" v-on:click="updateRank(targetFavorite, movie.rank)">{{movie.title}}</a>&emsp;&emsp;<b-button id="update-rank-button" v-on:click="updateRank(targetFavorite, movie.rank)" variant="light">{{movie.rank}}</b-button>
                 </div>
               </div>
               <b-button class="mt-3" block @click="$bvModal.hide(`${movie.movieId}`)">Close Me</b-button>
@@ -188,7 +188,7 @@ export default {
       },
       updateRank(movieId, rank) {
         movieService.updateRank(movieId, rank).then(response => {
-          const size = response.data.length > 10 ? 10 : response.data.length();
+          const size = response.data.length > 10 ? 10 : response.data.length;
           console.log(response.data.length)
           this.favoriteMovies = response.data.filter(movie => {
               return movie.rank != 0;
