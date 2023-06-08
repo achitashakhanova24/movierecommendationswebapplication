@@ -1,4 +1,6 @@
 <template>
+<div>
+  <Loading v-if="loading" />
   <div class="profilePage">
       <h1>Profile</h1>
       <div class="profileInfo">
@@ -31,16 +33,19 @@
           </div>
       </div>
   </div>
+  </div>
 </template>
 
 <script>
 import accountService from '../services/AccountService';
+import Loading from "../components/Loading.vue"
 import movieService from '../services/MovieService';
 export default {
     data() {
         return {
             username: '',
             email: '',
+            loading: true
         };
     },
    
@@ -58,7 +63,16 @@ export default {
       updateAccount(){
         accountService.updateAccount(this.email)
       }
-    }
+    },
+        mounted() {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1500);
+        },
+        components: {
+          Loading
+        },
+      
     
 }
 </script>

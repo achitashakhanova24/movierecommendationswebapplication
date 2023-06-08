@@ -1,5 +1,8 @@
 <template>
   <html>
+    <div>
+      <Loading v-if="loading" />
+
     <div class="favoritePage" @click="handleClick">
       <head>
         <link
@@ -110,12 +113,16 @@
         </b-carousel>
       </div>
     </div>
+    </div>
   </html>
 </template>
 <script src="js/jquery-1.7.1.min.js"></script>
 <script src="js/bootstrap.js"></script>
 <script>
+import Loading from "../components/Loading.vue"
 import movieService from '../services/MovieService'
+
+
 export default {
     data(){
         return {
@@ -127,7 +134,8 @@ export default {
             slide2: 0,
             sliding2: null,
             modalShow: false,
-            targetFavorite: null
+            targetFavorite: null,
+            loading: true
         }
     },
     methods: {
@@ -203,6 +211,14 @@ export default {
           })
         })
       }
+    },
+    mounted() {
+      setTimeout(() => {
+        this.loading = false;
+      }, 1500);
+    },
+    components: {
+      Loading
     },
     created(){
       movieService.getWatchList().then(response => {

@@ -1,4 +1,6 @@
 <template>
+<div>
+  <Loading v-if="loading" />
   <div class="home">
     <div class="vignette"></div>
     <head>
@@ -30,10 +32,12 @@
       </div>   
     </div>  
   </div>
+  </div>
 </template>
 <script src="js/jquery-1.7.1.min.js"></script>
 <script src="js/bootstrap.js"></script>
 <script>
+import Loading from "../components/Loading.vue"
 import movieService from "../services/MovieService";
 
 export default {
@@ -42,8 +46,8 @@ export default {
     return {
       newReleases: [],
       slide: 0,
-      sliding: null
-      
+      sliding: null,
+      loading: true
     }
   },
   methods: {
@@ -66,7 +70,15 @@ export default {
         movie.posterPath = "https://image.tmdb.org/t/p/w500/" + movie.posterPath;
       })
     })
-  }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 1500);
+  },
+  components: {
+    Loading
+  },
 };
 </script>
 
