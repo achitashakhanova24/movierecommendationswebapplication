@@ -35,7 +35,21 @@
         {{movie.description}}
       </b-card-text>
       <span class="favorites-buttons">
-          <b-button id="update-rank-button" v-on:click="updateWatchedStatus(movie.movieId)" variant="primary">Change Rank</b-button>
+          <div>
+            <b-button :class="`${movie.movieId}`" id="show-btn" @click="$bvModal.show(`${movie.movieId}`)" v-on:click="setTargetFavorite(movie.movieId)">Change Rank</b-button>
+
+            <b-modal hide-backdrop :id="`${movie.movieId}`" hide-footer >
+              <template #modal-title>
+                Choose a movie to swap ranks with #{{movie.rank}}&nbsp;{{movie.title}}: 
+              </template>
+              <div class="d-block text-center">
+                <div v-for="movie in favoriteMovies" :key="movie.movieId">
+                  <a variant="light" id="update-rank-button" v-on:click="updateWatchedStatus(movie.movieId)">{{movie.title}}</a>&emsp;&emsp;<b-button id="update-rank-button" v-on:click="updateRank(targetFavorite, movie.rank)" variant="light">{{movie.rank}}</b-button>
+                </div>
+              </div>
+              <b-button class="mt-3" block @click="$bvModal.hide(`${movie.movieId}`)">Close Me</b-button>
+            </b-modal>
+          </div>
       </span>
   </b-card>
   
@@ -111,12 +125,18 @@ export default {
             slide1: 0,
             sliding1: null,
             slide2: 0,
-            sliding2: null
+            sliding2: null,
+            modalShow: false,
+            targetFavorite: null
         }
     },
     methods: {
       handleClick(){
 
+      },
+      setTargetFavorite(movieId) {
+        this.targetFavorite = movieId;
+        console.log(this.targetFavorite)
       },
       onSlideStart1(slide) {
         this.sliding = true
@@ -165,6 +185,23 @@ export default {
             description: item.description,
           }
         });
+      },
+      updateRank(movieId, rank) {
+        movieService.updateRank(movieId, rank).then(response => {
+          const size = response.data.length > 10 ? 10 : response.data.size();
+          console.log(response.data.length)
+          this.favoriteMovies = response.data.filter(movie => {
+              return movie.rank != 0;
+          });
+          this.favoriteMovies.sort((a, b) => {
+            return a.rank < b.rank && a.rank != 0 ? -1 : 1;
+          })
+          this.favoriteMovies.forEach(movie => {
+            if(movie.backdropPath != "null") {
+              movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
+            }
+          })
+        })
       }
     },
     created(){
@@ -185,7 +222,7 @@ export default {
       })
     }),
     movieService.getFavorites().then(response => {
-      const size = response.data.length > 10 ? 10 : response.data.size();
+      const size = response.data.length > 10 ? 10 : response.data.length;
       console.log(response.data.length)
       this.favoriteMovies = response.data.filter(movie => {
           return movie.rank != 0;
@@ -331,5 +368,8 @@ b-button {
 
 #watched-button:hover {
   background-color: white;
+}
+.modal-backdrop {
+  background-color: transparent;
 }
 </style>

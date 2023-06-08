@@ -62,6 +62,10 @@ export default {
 
   editFavoritedStatus(movieId) {
     return axios.post(`/movie/favorite/${movieId}`);
+  },
+
+  updateRank(movieId, rank) {
+    return axios.put(`/movie/updateRank/${movieId}/${rank}`);
   }
 
 }
