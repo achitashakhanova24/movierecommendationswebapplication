@@ -41,6 +41,15 @@ export default {
 
 <style>
 
+h1 {
+  grid-area: "header";
+  color: rgb(255, 49, 49);
+  text-align: center;
+  font-family: 'Showtime';
+  font-size: 5rem;
+  margin-top: 20px;
+}
+
 h3 {
     font-style: normal;
 }
