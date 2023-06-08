@@ -99,12 +99,12 @@ public class JdbcAccountDao implements AccountDao{
     }
 
     @Override
-    public Account updateAccount(AccountDto accountDto, String username) {
+    public Account updateAccount(String email, String username) {
         String sql = "UPDATE accounts SET email = ? " +
                 "FROM users " +
                 "WHERE users.user_id = accounts.user_id AND users.username = ?";
         try {
-            jdbcTemplate.update(sql, accountDto.getEmail(), username);
+            jdbcTemplate.update(sql, email, username);
 
             return getAccountByUsername(username);
         }

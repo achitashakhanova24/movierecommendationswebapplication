@@ -24,8 +24,8 @@ public class AccountController {
         return dao.getAccountByUsername(principal.getName());
     }
 
-    @PutMapping
-    public Account updateAccountInfo(@Valid @RequestBody AccountDto accountDto, Principal principal){
-        return dao.updateAccount(accountDto, principal.getName());
+    @PutMapping("/{email}")
+    public Account updateAccountInfo(@PathVariable String email, Principal principal){
+        return dao.updateAccount(email, principal.getName());
     }
 }

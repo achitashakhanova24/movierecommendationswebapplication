@@ -10,5 +10,5 @@ public interface AccountDao {
     Account getAccountByUserId(int userId);
     Account getAccountByAccountId(int accountId);
     Account getAccountByUsername(String username);
-    Account updateAccount(AccountDto accountDto, String username);
+    Account updateAccount(String email, String username);
 }

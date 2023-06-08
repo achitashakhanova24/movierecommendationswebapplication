@@ -33,7 +33,21 @@
                         {{movie.description}}
                     </b-card-text>
                     <span class="favorites-buttons">
-                        <b-button id="update-rank-button" v-on:click="updateWatchedStatus(movie.movieId)" variant="primary">Change Rank</b-button>
+                        <div>
+                            <b-button :class="`${movie.movieId}`" id="show-btn" @click="$bvModal.show(`${movie.movieId}`)" v-on:click="setTargetFavorite(movie.movieId)">Change Rank</b-button>
+
+                            <b-modal hide-backdrop :id="`${movie.movieId}`" hide-footer >
+                            <template #modal-title>
+                                Choose a movie to swap ranks with #{{movie.rank}}&nbsp;{{movie.title}}: 
+                            </template>
+                            <div class="d-block text-center">
+                                <div class="modal-movie-info" v-for="movie in favoriteMovies" :key="movie.movieId">
+                                <a variant="light" id="update-rank-button" >{{movie.title}}</a>&emsp;&emsp;<b-button id="update-rank-button" v-on:click="updateRank(targetFavorite, movie.rank)" variant="secondary">{{movie.rank}}</b-button>
+                                </div>
+                            </div>
+                            <b-button class="mt-3" block @click="$bvModal.hide(`${movie.movieId}`)">Close Me</b-button>
+                            </b-modal>
+                        </div>
                     </span>
                 </b-card>
             
@@ -101,6 +115,24 @@ export default {
             }
           })
         })
+      },
+      updateRank(movieId, rank) {
+        movieService.updateRank(movieId, rank).then(response => {
+          this.favoriteMovies = response.data.filter(movie => {
+              return movie.rank != 0;
+          });
+          this.favoriteMovies.sort((a, b) => {
+            return a.rank < b.rank && a.rank != 0 ? -1 : 1;
+          })
+          this.favoriteMovies.forEach(movie => {
+            if(movie.backdropPath != "null") {
+              movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
+            }
+          })
+        })
+      },
+      setTargetFavorite(movieId) {
+        this.targetFavorite = movieId;
       }
     }
 }
@@ -136,7 +168,7 @@ export default {
         justify-content: space-evenly;
         flex-wrap: wrap;
         align-items: center;
-        
+        font-family: 'Paytone One', sans-serif;
         
     }
     .main-div {
@@ -183,4 +215,10 @@ export default {
     #watched-button:hover {
         background-color: white;
     }
+
+    .modal-movie-info {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Paytone One', sans-serif;
+}
 </style>

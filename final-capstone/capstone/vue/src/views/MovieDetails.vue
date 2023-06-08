@@ -31,7 +31,7 @@
             <b-button v-on:click="changeWatchedStatus(movie.movieId)" v-if="movie.watched" id="watched-button"><b-icon style="color: black; border-radius: 10px;" icon="binoculars-fill" aria-label="Help"></b-icon></b-button>
             &emsp;&emsp;&emsp;
             <span>
-              <b-button :class="`${movie.movieId}`" id="show-btn" @click="$bvModal.show(`${movie.movieId}`)" v-on:click="setTargetFavorite(movie.movieId)">Change Rank</b-button>
+              <b-button v-if="movie.favorited" :class="`${movie.movieId}`" id="show-btn" @click="$bvModal.show(`${movie.movieId}`)" v-on:click="setTargetFavorite(movie.movieId)">Change Rank</b-button>
 
               <b-modal hide-backdrop :id="`${movie.movieId}`" hide-footer >
                 <template #modal-title >

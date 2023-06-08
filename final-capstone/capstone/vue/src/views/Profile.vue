@@ -4,11 +4,29 @@
       <div class="profileInfo">
             <div class="vignette"></div>
           <div>
-              <h3>Username: {{ username }}      </h3>
+              
               <!-- <p>{{ username }}</p> -->
           </div>
-          <div>
-              <h3>Email: {{email}}</h3>
+          <div class="info-section">
+           
+              <form @submit.prevent="updateAccount()">
+                <div class="form-section">
+                  <h3>Username:  </h3>
+                  <input v-model="username" disabled placeholder="Enter email address" type="text">
+                </div>
+                <div class="form-section">
+                  
+                   
+                  <h3>Email: </h3>
+                  <input v-model="email" placeholder="Enter email address" type="text">
+                  
+                </div>
+                <div class="submit-button">
+                  <input type="submit">
+                </div>
+                
+              </form>
+              
               <!-- <p>{{ email }}</p> -->
           </div>
       </div>
@@ -16,6 +34,7 @@
 </template>
 
 <script>
+import accountService from '../services/AccountService';
 import movieService from '../services/MovieService';
 export default {
     data() {
@@ -34,7 +53,12 @@ export default {
       .catch(error => {
         console.log(error);
       });
-        }
+        },
+    methods: {
+      updateAccount(){
+        accountService.updateAccount(this.email)
+      }
+    }
     
 }
 </script>
@@ -71,11 +95,11 @@ h3 {
 
 .profileInfo{
     color: white;
-    border: solid black;
+    /* border: solid black;
     background-color: rgba(0, 0, 0, 0.8);
     font-weight: 0;
     width: 275px;
-    height: 100px
+    height: 100px */
 
     
 }
@@ -92,5 +116,12 @@ h3 {
     rgba(0, 0, 0, 0.7) 60%
   );
   z-index: -1;
+}
+.info-section{
+  display: flex;
+  flex-direction: column;
+}
+.submit-button{
+  margin-top: 20px;
 }
 </style>
