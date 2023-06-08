@@ -88,13 +88,13 @@ label {
   border-radius: 7px;
   margin-top: 50px;
   margin-left: -8px;
-  text-indent: 2em;
+  
   font-family: 'Paytone One', sans-serif;
 }
 
 p{
     color:white;
-    
+    text-indent: 2em;
     max-width: 1500px;
     background-color: rgba(0, 0, 0, 0.7);
     font-size: 25px;

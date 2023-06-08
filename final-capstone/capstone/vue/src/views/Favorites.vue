@@ -26,17 +26,15 @@
         tag="article"
         style="max-width: 20rem;"
         class="mb-2"
-        blank-color="#777"
       >
       <b-card-text>
-        <b-button id="details-button" v-on:click="getMovieDetails(movie)" variant="primary">Details</b-button>
+        <b-button id="details-button" v-on:click="getMovieDetails(movie.movieId)" variant="primary">Details</b-button>
+        <b-button v-on:click="updateWatchedStatus(movie.movieId)" v-if="!movie.watched" id="not-watched-button"><b-icon style="color: black; border-radius: 10px;" icon="binoculars" aria-label="Help"></b-icon></b-button>
+        <b-button v-on:click="updateWatchedStatus(movie.movieId)" v-if="movie.watched" id="watched-button"><b-icon style="color: black; border-radius: 10px;" icon="binoculars-fill" aria-label="Help"></b-icon></b-button>
         <br><br><br>
         {{movie.description}}
-        <br>
-        Watched: {{movie.watched}}
       </b-card-text>
       <span class="favorites-buttons">
-          <b-button id="update-watched-button" v-on:click="updateWatchedStatus(movie.movieId)" variant="primary">Mark Watched</b-button>
           <b-button id="update-rank-button" v-on:click="updateWatchedStatus(movie.movieId)" variant="primary">Change Rank</b-button>
       </span>
   </b-card>
@@ -49,7 +47,7 @@
         
         <b-carousel
           id="carousel-1"
-          v-model="slide"
+          v-model="slide1"
           :interval="4000"
           controls
           indicators
@@ -57,8 +55,8 @@
           img-width="1024"
           img-height="480"
           style="text-shadow: 1px 1px 2px #333"
-          @sliding-start="onSlideStart"
-          @sliding-end="onSlideEnd"
+          @sliding-start="onSlideStart1"
+          @sliding-end="onSlideEnd1"
         >
           <b-carousel-slide
             v-for="movie in watchList"
@@ -76,7 +74,7 @@
       <div class="seenListCarousel">
         <b-carousel
           id="carousel-2"
-          v-model="slide"
+          v-model="slide2"
           :interval="4000"
           controls
           indicators
@@ -84,8 +82,8 @@
           img-width="1024"
           img-height="480"
           style="text-shadow: 1px 1px 2px #333"
-          @sliding-start="onSlideStart"
-          @sliding-end="onSlideEnd"
+          @sliding-start="onSlideStart2"
+          @sliding-end="onSlideEnd2"
         >
           <b-carousel-slide
             v-for="movie in seenList"
@@ -110,18 +108,26 @@ export default {
             favoriteMovies: [],
             watchList: [],
             seenList: [],
-            slide: 0,
-            sliding: null
+            slide1: 0,
+            sliding1: null,
+            slide2: 0,
+            sliding2: null
         }
     },
     methods: {
       handleClick(){
 
       },
-      onSlideStart(slide) {
+      onSlideStart1(slide) {
         this.sliding = true
       },
-      onSlideEnd(slide) {
+      onSlideEnd1(slide) {
+        this.sliding = false
+      },
+      onSlideStart2(slide) {
+        this.sliding = true
+      },
+      onSlideEnd2(slide) {
         this.sliding = false
       },
       updateWatchedStatus(movieId){
@@ -129,6 +135,22 @@ export default {
           this.favoriteMovies.forEach(movie => {
             if(movie.movieId === response.data.movieId) {
               movie.watched = response.data.watched;
+              if(movie.posterPath != "null") {
+                movie.posterPath = "https://image.tmdb.org/t/p/w780/" + movie.posterPath;
+              }
+              if(movie.watched) {
+                this.seenList.push(movie);
+                this.watchList = this.watchList.filter(currentMovie => {
+                  return currentMovie.movieId != movie.movieId;
+                })
+              }
+              else {
+                this.watchList.push(movie);
+                this.seenList = this.seenList.filter(currentMovie => {
+                  return currentMovie.movieId != movie.movieId;
+                })
+              }
+              console.log(this.watchList);
             }
           })
         })
@@ -176,16 +198,6 @@ export default {
            movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
         }
       })
-
-      //  response.data.forEach(movie => {
-      //    if(movie.backdropPath != "null") {
-      //      movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
-      //   }
-      //   this.favoriteMovies.push(movie);
-      // })
-      // this.favoriteMovies.sort((a, b) => {
-      //   return a.rank < b.rank ? -1 : 1;
-      // })
       console.log(this.favoriteMovies)
     })
   }
@@ -302,5 +314,22 @@ img:before {
 
 b-button {
   width: 10px;
+}
+
+#not-watched-button {
+  background-color: white;
+  border-color: white;
+}
+
+#not-watched-button:hover {
+  background-color: rgba(255, 0, 0, 0.315);
+}
+#watched-button {
+  background-color: rgba(255, 0, 0, 0.315);
+  border-color: white;
+}
+
+#watched-button:hover {
+  background-color: white;
 }
 </style>
