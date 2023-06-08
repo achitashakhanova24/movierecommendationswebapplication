@@ -238,7 +238,7 @@ public class MovieService {
         for(int i = 1; i <= 20; i++) {
             if (searchTitle != "") {
                 responseEntity = restTemplate.exchange(MOVIE_API + "/search/movie" + "?api_key=" + KEY + "&query=" + searchTitle + "&sort_by=vote_average.desc" + "&page=" + i, HttpMethod.GET, entity, String.class);
-            } else if (searchGenre != "" && releaseDate != null && language != "") {
+            } else if (!searchGenre.equals("") && releaseDate != null && language != "") {
                 int genreId = 0;
                 for (Integer key : genreIdToName.keySet()) {
                     if (genreIdToName.get(key).equalsIgnoreCase(searchGenre)) {
@@ -247,7 +247,7 @@ public class MovieService {
                 }
 
                 responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&with_genres=" + genreId + "&primary_release_date.gte=" + releaseDate + "&language=" + language + "&sort_by=vote_average.desc" + "&page=" + i, HttpMethod.GET, entity, String.class);
-            } else if (searchGenre != "" && releaseDate != null) {
+            } else if (!searchGenre.equals("") && releaseDate != null) {
                 int genreId = 0;
                 for (Integer key : genreIdToName.keySet()) {
                     if (genreIdToName.get(key).equalsIgnoreCase(searchGenre)) {
@@ -258,7 +258,7 @@ public class MovieService {
                 responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&with_genres=" + genreId + "&primary_release_date.gte=" + releaseDate + "&sort_by=vote_average.desc" + "&page=" + i, HttpMethod.GET, entity, String.class);
             } else if (releaseDate != null && language != "") {
                 responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&primary_release_date.gte=" + releaseDate + "&language=" + language + "&sort_by=vote_average.desc" + "&page=" + i, HttpMethod.GET, entity, String.class);
-            } else if (searchGenre != "" && language != "") {
+            } else if (!searchGenre.equals("") && language != "") {
                 int genreId = 0;
                 for (Integer key : genreIdToName.keySet()) {
                     if (genreIdToName.get(key).equalsIgnoreCase(searchGenre)) {
@@ -266,16 +266,8 @@ public class MovieService {
                     }
                 }
 
-                responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&with_genres=" + genreId + "&language=" + language + "&sort_by=vote_average.desc" + "&page=" + i, HttpMethod.GET, entity, String.class);
+                responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY +  "&with_genres=" + genreId + "&language=" + language + "&sort_by=vote_average.desc" + "&page=" + i, HttpMethod.GET, entity, String.class);
             } else if (releaseDate != null) {
-                int genreId = 0;
-                if (searchGenre != null) {
-                    for (Integer key : genreIdToName.keySet()) {
-                        if (genreIdToName.get(key).equalsIgnoreCase(searchGenre)) {
-                            genreId = key;
-                        }
-                    }
-                }
                 responseEntity = restTemplate.exchange(MOVIE_API + "/discover/movie" + "?api_key=" + KEY + "&primary_release_date.gte=" + releaseDate + "&sort_by=vote_average.desc" + "&page=" + i, HttpMethod.GET, entity, String.class);
             } else if (searchGenre != "") {
                 int genreId = 0;
@@ -310,7 +302,7 @@ public class MovieService {
             movie.setTitle(jsonNode.get(i).path("original_title").asText());
             movie.setLanguage(jsonNode.get(i).path("original_language").asText());
             JsonNode array = jsonNode.get(i).path("genre_ids");
-            String release = jsonNode.get(i).path("release_date").asText().equals("") ? "Unreleased" : jsonNode.get(i).path("release_date").asText().substring(0,10);
+            String release = jsonNode.get(i).path("release_date").asText().equals("") ? "Unreleased" : jsonNode.get(i).path("release_date").asText().substring(5,10) + "-" + jsonNode.get(i).path("release_date").asText().substring(0,4);
             movie.setReleaseDate(release);
             movie.setDescription(jsonNode.get(i).path("overview").asText());
             movie.setRating(jsonNode.get(i).path("vote_average").asDouble());

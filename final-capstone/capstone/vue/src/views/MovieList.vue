@@ -26,10 +26,10 @@
                     <label for="title">Release Date</label>
                     <input id="date" type="date" v-model="filterDate">
                 </div>
-                <div>
+                <!-- <div>
                     <label for="title">Language</label>
                     <input id="language" type="text" placeholder="Language" v-model="filterLanguage">
-                </div>
+                </div> -->
                 <div class="filterButton">
                     <button type="submit">Submit</button>
                 </div>
@@ -84,8 +84,10 @@ export default {
                     title: currentMovie.title,
                     rating: currentMovie.rating,
                     releaseDate: currentMovie.releaseDate,
+                    genres: currentMovie.genres,
                     description: currentMovie.description,
-                    language: currentMovie.language
+                    language: currentMovie.language,
+                    
                 });
                 this.movieIds.push(currentMovie.movieId);
             })
@@ -131,7 +133,7 @@ export default {
         });
         },
         search() {
-            movieService.searchMovies(this.filterTitle, this.filterGenre, this.filterDate, this.filterLanguage).then(response => {
+            movieService.searchMovies(this.filterTitle, this.filterGenre, this.filterDate).then(response => {
                 this.movies = [];
                 this.movieIds = [];
                 response.data.forEach(currentMovie => {
@@ -139,11 +141,14 @@ export default {
                         title: currentMovie.title,
                         rating: currentMovie.rating,
                         releaseDate: currentMovie.releaseDate,
+                        genres: currentMovie.genres,
                         description: currentMovie.description,
-                        language: currentMovie.language
+                        language: currentMovie.language,
+                        
                     });
                     this.movieIds.push(currentMovie.movieId);
                 })
+                console.log(releaseDate);
             })
             this.currentPage = 1;
         }

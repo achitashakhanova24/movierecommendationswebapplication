@@ -48,12 +48,11 @@ export default {
     return axios.put(`/movie/editWatched/${movieId}`);
   },
 
-  searchMovies(title, genre, date, language) {
+  searchMovies(title, genre, date) {
      const queryParams = {
       title: title,
       genre: genre,
-      date: date,
-      language: language
+      releaseDate: date,
     };
     const params = new URLSearchParams(queryParams);
 

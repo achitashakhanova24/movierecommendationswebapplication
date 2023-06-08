@@ -188,7 +188,7 @@ export default {
       },
       updateRank(movieId, rank) {
         movieService.updateRank(movieId, rank).then(response => {
-          const size = response.data.length > 10 ? 10 : response.data.size();
+          const size = response.data.length > 10 ? 10 : response.data.length();
           console.log(response.data.length)
           this.favoriteMovies = response.data.filter(movie => {
               return movie.rank != 0;
