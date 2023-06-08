@@ -4,7 +4,7 @@
       </div>
     <form @submit.prevent="login">
       <!-- <h1 class="headline">CinemaCrush</h1> -->
-      <h1 >Sign In</h1>
+      <h1 >Sign_In</h1>
       <div class="alert" role="alert" v-if="invalidCredentials">
         Invalid username and password!
       </div>

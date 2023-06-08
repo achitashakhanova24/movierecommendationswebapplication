@@ -170,6 +170,7 @@ export default {
         color: whitesmoke;
         gap: 10px;
         margin-bottom: 10px;
+        align-items: flex-end;
     }
     form > div {
         display: flex;
@@ -219,4 +220,5 @@ export default {
     ul {
         background-color: rgb(0, 0, 0);
     }
+    
 </style>

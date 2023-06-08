@@ -6,6 +6,7 @@
     </head>
     <br>
     <h1>Cinema_Crush</h1>
+    <h3>New Releases</h3>
     
     <!-- <p> Swipe Right for Your Movie Night!</p> -->
     <div class="poster-container">
@@ -144,6 +145,10 @@ p{
   @font-face {
     font-family: 'Showtime';
     src: url('/assets/fonts/Showtime.ttf') format('truetype');
+  }
+
+  h3{
+    color: rgb(255, 49, 49);
   }
 
 </style>
