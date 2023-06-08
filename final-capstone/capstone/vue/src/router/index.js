@@ -11,6 +11,7 @@ import Recommendations from '../views/Recommendations.vue'
 import Profile from '../views/Profile.vue' 
 import MovieList from '../views/MovieList.vue'
 import MovieDetails from '../views/MovieDetails.vue'
+import MyLists from '../views/MyLists.vue'
 
 Vue.use(Router)
 
@@ -71,6 +72,14 @@ const router = new Router({
       path: "/favorites",
       name: "favorites",
       component: Favorites,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/myLists",
+      name: "my-lists",
+      component: MyLists,
       meta: {
         requiresAuth: true
       }
