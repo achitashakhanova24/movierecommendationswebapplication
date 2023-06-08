@@ -10,6 +10,10 @@ export default {
     return axios.get(`/movie/${movieId}`)
   },
 
+  getMovieByTitle(title) {
+    return axios.get(`/movie/title/${title}`)
+  },
+
   getProfile(){
     return axios.get('/account')
   },
@@ -54,6 +58,10 @@ export default {
     const params = new URLSearchParams(queryParams);
 
     return axios.get('/movie/search', {params});
+  },
+
+  editFavoritedStatus(movieId) {
+    return axios.post(`/movie/favorite/${movieId}`);
   }
 
 }

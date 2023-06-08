@@ -64,6 +64,7 @@ export default {
             currentPage: 1,
             rows: 10,
             movies: [],
+            movieIds: [],
             filterTitle: '',
             filterGenre: '',
             filterDate: '',
@@ -71,12 +72,19 @@ export default {
         };
     },
     created() {
-            movieService.getPageOfMovies().then(response => {
-                console.log(response.data)
-                response.data.forEach(currentMovie => {
-                    this.movies.push(currentMovie);
-                })
+        movieService.getPageOfMovies().then(response => {
+            console.log(response.data)
+            response.data.forEach(currentMovie => {
+                this.movies.push({
+                    title: currentMovie.title,
+                    rating: currentMovie.rating,
+                    releaseDate: currentMovie.releaseDate,
+                    description: currentMovie.description,
+                    language: currentMovie.language
+                });
+                this.movieIds.push(currentMovie.movieId);
             })
+        })
         console.log(this.movies);
         // movieService.getPageOfMovies(1).then(response => {
         //     console.log(response.data);
@@ -85,16 +93,18 @@ export default {
     },
     methods: {
         handleRowClick(item, index, event){
+        console.log(this.movies.indexOf(item));
         console.log(item);
         console.log(index);
          console.log(event);
          this.$router.push({
            name:'movie-details', params:{
-             id: item.title,
-             rating: item.rating,
-             genre: item.genres,
-             releaseDate: item.releaseDate,
-             description: item.description,
+                id: this.movieIds[index],
+                title: item.title,
+                rating: item.rating,
+                genre: item.genres,
+                releaseDate: item.releaseDate,
+                description: item.description,
 
             }
             });
@@ -116,8 +126,18 @@ export default {
         },
         search() {
             movieService.searchMovies(this.filterTitle, this.filterGenre, this.filterDate, this.filterLanguage).then(response => {
-                console.log(response.data);
-                this.movies = response.data;
+                this.movies = [];
+                this.movieIds = [];
+                response.data.forEach(currentMovie => {
+                    this.movies.push({
+                        title: currentMovie.title,
+                        rating: currentMovie.rating,
+                        releaseDate: currentMovie.releaseDate,
+                        description: currentMovie.description,
+                        language: currentMovie.language
+                    });
+                    this.movieIds.push(currentMovie.movieId);
+                })
             })
             this.currentPage = 1;
         }

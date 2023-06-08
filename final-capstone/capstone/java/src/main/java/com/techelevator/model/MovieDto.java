@@ -12,9 +12,10 @@ public class MovieDto {
     private int rank;
     private String posterPath;
     private String backdropPath;
+    public double rating;
     
 
-    public MovieDto(String title, String genres, String releaseDate, String description, String language, int movieId, boolean favorited, boolean watched, int rank,String posterPath, String backdropPath){
+    public MovieDto(String title, String genres, String releaseDate, String description, String language, int movieId, boolean favorited, boolean watched, int rank,String posterPath, String backdropPath, double rating){
         this.title = title;
         this.genres = genres;
         this.releaseDate = releaseDate;
@@ -26,9 +27,18 @@ public class MovieDto {
         this.rank = rank;
         this.posterPath = posterPath;
         this.backdropPath = backdropPath;
+        this.rating = rating;
     }
 
     public MovieDto(){}
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
 
     public String getBackdropPath() {
         return backdropPath;

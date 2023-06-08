@@ -38,9 +38,14 @@ public class MovieController {
     }
 
     @GetMapping(path="/{movieId}")
-    public ResponseEntity<MovieDto> getMovie(@PathVariable int movieId){
+    public ResponseEntity<MovieDto> getMovie(@PathVariable int movieId, Principal principal){
 
-        return new ResponseEntity<>(movieService.getMovie(movieId), HttpStatus.OK) ;
+        return new ResponseEntity<>(movieDao.getMovie(movieId, principal.getName()), HttpStatus.OK) ;
+    }
+
+    @GetMapping(path="/byTitle/{title}")
+    public ResponseEntity<MovieDto> getMovieByTitle(@PathVariable String title){
+        return new ResponseEntity<>(movieService.getMovieByTitle(title), HttpStatus.OK) ;
     }
 
     @GetMapping(path="/list")

@@ -8,6 +8,7 @@ import java.util.List;
 public interface MovieDao {
 
     Movie getRandomMovie();
+    MovieDto getMovie(int movieId, String username);
 
     List<MovieDto> getFavorites(String username);
 

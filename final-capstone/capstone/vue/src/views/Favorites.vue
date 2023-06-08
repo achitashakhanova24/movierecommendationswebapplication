@@ -28,13 +28,15 @@
         class="mb-2"
       >
       <b-card-text>
+        <b-button id="details-button" v-on:click="getMovieDetails(movie)" variant="primary">Details</b-button>
+        <br><br><br>
         {{movie.description}}
         <br>
         Watched: {{movie.watched}}
       </b-card-text>
       <span class="favorites-buttons">
-            <b-button id="update-watched-button" v-on:click="updateWatchedStatus(movie.movieId)" variant="primary">Mark Watched</b-button><b-button id="update-rank-button" v-on:click="updateWatchedStatus(movie.movieId)" variant="primary">Change Rank</b-button>
-
+          <b-button id="update-watched-button" v-on:click="updateWatchedStatus(movie.movieId)" variant="primary">Mark Watched</b-button>
+          <b-button id="update-rank-button" v-on:click="updateWatchedStatus(movie.movieId)" variant="primary">Change Rank</b-button>
       </span>
   </b-card>
   
@@ -112,24 +114,35 @@ export default {
         }
     },
     methods: {
-        handleClick(){
+      handleClick(){
 
-    },
-    onSlideStart(slide) {
+      },
+      onSlideStart(slide) {
         this.sliding = true
-    },
-    onSlideEnd(slide) {
+      },
+      onSlideEnd(slide) {
         this.sliding = false
-    },
-    updateWatchedStatus(movieId){
-      movieService.editWatchedStatus(movieId).then(response => {
-        this.favoriteMovies.forEach(movie => {
-          if(movie.movieId === response.data.movieId) {
-            movie.watched = response.data.watched;
-          }
+      },
+      updateWatchedStatus(movieId){
+        movieService.editWatchedStatus(movieId).then(response => {
+          this.favoriteMovies.forEach(movie => {
+            if(movie.movieId === response.data.movieId) {
+              movie.watched = response.data.watched;
+            }
+          })
         })
-      })
-    }
+      },
+      getMovieDetails(item) {
+        this.$router.push({
+          name:'movie-details', params:{
+            id: item.movieId,
+            rating: item.rating,
+            genre: item.genres,
+            releaseDate: item.releaseDate,
+            description: item.description,
+          }
+        });
+      }
     },
     created(){
       movieService.getWatchList().then(response => {
@@ -148,13 +161,31 @@ export default {
           this.seenList.push(movie);
       })
     }),
-      movieService.getFavorites().then(response => {
-        response.data.forEach(movie => {
-          if(movie.backdropPath != "null") {
-            movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
-          }
-          this.favoriteMovies.push(movie);
+    movieService.getFavorites().then(response => {
+      const size = response.data.length > 10 ? 10 : response.data.size();
+      console.log(response.data.length)
+      this.favoriteMovies = response.data.filter(movie => {
+          return movie.rank != 0;
+      });
+      this.favoriteMovies.sort((a, b) => {
+        return a.rank < b.rank && a.rank != 0 ? -1 : 1;
       })
+      this.favoriteMovies.forEach(movie => {
+        if(movie.backdropPath != "null") {
+           movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
+        }
+      })
+
+      //  response.data.forEach(movie => {
+      //    if(movie.backdropPath != "null") {
+      //      movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
+      //   }
+      //   this.favoriteMovies.push(movie);
+      // })
+      // this.favoriteMovies.sort((a, b) => {
+      //   return a.rank < b.rank ? -1 : 1;
+      // })
+      console.log(this.favoriteMovies)
     })
   }
 }
@@ -266,5 +297,9 @@ article {
 }
 img:before {
   background-image: "../../images/default-backdrop.jpg";
+}
+
+b-button {
+  width: 10px;
 }
 </style>

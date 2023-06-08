@@ -7,16 +7,26 @@ public class MovieTableDto {
     private String releaseDate;
     private String description;
     private String language;
+    private int movieId;
 
     public MovieTableDto(){}
 
-    public MovieTableDto(String title, String genres, String releaseDate, String description, String language, double rating){
+    public MovieTableDto(String title, String genres, String releaseDate, String description, String language, double rating, int movieId){
         this.title = title;
         this.rating = rating;
         this.genres = genres;
         this.releaseDate = releaseDate;
         this.description = description;
         this.language = language;
+        this.movieId = movieId;
+    }
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
     }
 
     public double getRating() {

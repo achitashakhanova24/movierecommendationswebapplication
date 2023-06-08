@@ -77,6 +77,39 @@ public class MovieService {
                 String genre = array.get(i).path("name").asText();
                 genreList += genre;
             }
+            String release = jsonNode.path("release_date").asText().equals("") ? "Unreleased" : jsonNode.path("release_date").asText().substring(5,10) + "-" + jsonNode.path("release_date").asText().substring(0,4);
+            movie.setReleaseDate(release);
+            movie.setDescription(jsonNode.path("overview").asText());
+            movie.setGenres(genreList);
+            movie.setMovieId(jsonNode.path("id").asInt());
+            movie.setPosterPath(jsonNode.path("poster_path").asText());
+            movie.setBackdropPath(jsonNode.path("backdrop_path").asText());
+            movie.setRating(jsonNode.path("vote_average").asDouble());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return movie;
+    }
+
+    public MovieDto getMovieByTitle(String title) {
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode;
+        ResponseEntity<String> responseEntity = restTemplate.exchange(MOVIE_API + "/search/movie" + "?api_key=" + KEY + "&query=" + title.replace("%20", ""), HttpMethod.GET, entity, String.class);
+
+        MovieDto movie = new MovieDto();
+
+        try{
+            jsonNode = mapper.readTree(responseEntity.getBody());
+            movie.setTitle(jsonNode.path("original_title").asText());
+            movie.setLanguage(jsonNode.path("original_language").asText());
+            JsonNode array = jsonNode.path("genres");
+
+            String genreList = "";
+            for (int i = 0; i < array.size(); i++){
+                String genre = array.get(i).path("name").asText();
+                genreList += genre;
+            }
 
             movie.setReleaseDate(jsonNode.path("release_date").asText());
             movie.setDescription(jsonNode.path("overview").asText());
@@ -281,7 +314,7 @@ public class MovieService {
             movie.setReleaseDate(release);
             movie.setDescription(jsonNode.get(i).path("overview").asText());
             movie.setRating(jsonNode.get(i).path("vote_average").asDouble());
-//                movie.setMovieId(jsonNode.get(i).path("id").asInt());
+            movie.setMovieId(jsonNode.get(i).path("id").asInt());
             for (int j = 0; j < array.size(); j++) {
                 int genre = array.get(j).asInt();
                 if(j == (array.size()-1)){

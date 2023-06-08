@@ -35,6 +35,25 @@ public class JdbcMovieDao implements MovieDao{
     }
 
     @Override
+    public MovieDto getMovie(int movieId, String username) {
+        MovieDto dto = getFavoriteMovie(movieId, username);
+        MovieDto movie = new MovieDto();
+        if(dto == null) {
+            movie = movieService.getMovie(movieId);
+            movie.setFavorited(false);
+            movie.setWatched(false);
+            movie.setRank(0);
+        }
+        else {
+            movie = movieService.getMovie(movieId);
+            movie.setWatched(dto.isWatched());
+            movie.setFavorited(true);
+            movie.setRank(dto.getRank());
+        }
+        return movie;
+    }
+
+    @Override
     public MovieDto favoriteMovie(int movieId, String username) {
         String sql = "INSERT INTO favorites (user_id, movie_id, watched, rank) " +
                 "VALUES ((SELECT user_id FROM users WHERE username = ?), ?, false, ?) RETURNING favorites_id";
@@ -109,11 +128,15 @@ public class JdbcMovieDao implements MovieDao{
         String sql = "DELETE FROM favorites " +
                 "WHERE movie_id = ? AND user_id = (SELECT user_id FROM users WHERE username = ?);";
         try{
+            MovieDto movie = getFavoriteMovie(movieId, username);
             int rowsAffected = jdbcTemplate.update(sql, movieId, username);
             if(rowsAffected != 0) {
                 MovieDto movieDto = movieService.getMovie(movieId);
                 movieDto.setWatched(false);
                 movieDto.setFavorited(false);
+                if(movie.getRank() != 0) {
+                    fixRanks(username, movie.getRank());
+                }
                 return movieDto;
             }
             else {
@@ -194,10 +217,13 @@ public class JdbcMovieDao implements MovieDao{
 
         try {
             MovieDto movieDto = getFavoriteMovie(movieId, username);
-            jdbcTemplate.update(sql, !movieDto.isWatched(), username, movieId);
-
-
-               /* MovieDto movieDto = movieService.getMovie(rowSet.getInt("movie_id"));*/
+            if(movieDto != null) {
+                jdbcTemplate.update(sql, !movieDto.isWatched(), username, movieId);
+            }
+            else {
+                movieDto = favoriteMovie(movieId, username);
+                jdbcTemplate.update(sql, !movieDto.isWatched(), username, movieId);
+            }
             movieDto.setWatched(!movieDto.isWatched());
             return movieDto;
         } catch (CannotGetJdbcConnectionException e) {
@@ -262,6 +288,36 @@ public class JdbcMovieDao implements MovieDao{
     }
 
 
+    private void fixRanks(String username, int index) {
+        String unrankedSql = "SELECT * FROM favorites " +
+                "JOIN users ON users.user_id = favorites.user_id " +
+                "Where users.username = ? AND favorites.rank = 0;";
+        String updateSql = "UPDATE favorites SET rank = ? " +
+                "FROM users " +
+                "WHERE users.user_id = favorites.user_id AND users.username = ? AND favorites.rank = ?";
+
+        List<MovieDto> rankedFavorites = new ArrayList<>();
+
+        try{
+            while(index < 10) {
+                jdbcTemplate.update(updateSql, index, username, index+1);
+                index++;
+            }
+
+            SqlRowSet unrankedRowSet = jdbcTemplate.queryForRowSet(unrankedSql, username);
+
+            if(unrankedRowSet.next()) {
+                jdbcTemplate.update(updateSql + " AND favorites.movie_id = ?", 10, username, 0, unrankedRowSet.getInt("movie_id"));
+            }
+        } catch(CannotGetJdbcConnectionException e) {
+            throw new CannotGetJdbcConnectionException("Could not connect to data source");
+        } catch(BadSqlGrammarException e) {
+            throw new BadSqlGrammarException(e.getMessage(), updateSql, e.getSQLException());
+        } catch(DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException(e.getMessage());
+        }
+
+    }
 
     public MovieDto mapRowToMovieDto(SqlRowSet sqlRowSet){
         MovieDto movieDto = new MovieDto();
