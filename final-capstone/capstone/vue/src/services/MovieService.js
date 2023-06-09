@@ -65,6 +65,10 @@ export default {
 
   updateRank(movieId, rank) {
     return axios.put(`/movie/updateRank/${movieId}/${rank}`);
+  },
+
+  getRecommendations() {
+    return axios.get('/movie/recommendations');
   }
 
 }

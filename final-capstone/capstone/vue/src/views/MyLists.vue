@@ -46,8 +46,8 @@
                 Choose a movie to swap ranks with #{{movie.rank}}&nbsp;{{movie.title}}: 
               </template>
               <div class="d-block text-center">
-                <div v-for="movie in favoriteMovies" :key="movie.movieId">
-                  <a variant="light" id="update-rank-button" v-on:click="updateRank(targetFavorite, movie.rank)">{{movie.title}}</a>&emsp;&emsp;<b-button id="update-rank-button" v-on:click="updateRank(targetFavorite, movie.rank)" variant="light">{{movie.rank}}</b-button>
+                <div class="modal-movie-info" v-for="movie in allMovies" :key="movie.movieId">
+                  <a variant="light" id="update-rank-button" >{{movie.title}}</a>&emsp;&emsp;<b-button id="update-rank-button" v-on:click="updateRank(targetFavorite, movie.rank)" variant="secondary">{{movie.rank}}</b-button>
                 </div>
               </div>
               <b-button class="mt-3" block @click="$bvModal.hide(`${movie.movieId}`)">Close Me</b-button>
@@ -135,7 +135,8 @@ export default {
             sliding2: null,
             modalShow: false,
             targetFavorite: null,
-            loading: true
+            loading: true,
+            allMovies: []
         }
     },
     methods: {
@@ -195,20 +196,35 @@ export default {
         });
       },
       updateRank(movieId, rank) {
+        console.log(rank);
+        if(rank === "Unranked"){         
+          rank = 0;
+        }
         movieService.updateRank(movieId, rank).then(response => {
           const size = response.data.length > 10 ? 10 : response.data.length;
+          this.allMovies = [];
           console.log(response.data.length)
+          response.data.forEach(movie => {
+            if(movie.backdropPath != "null") {
+              movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
+            }
+          })
+          
           this.favoriteMovies = response.data.filter(movie => {
               return movie.rank != 0;
           });
           this.favoriteMovies.sort((a, b) => {
             return a.rank < b.rank && a.rank != 0 ? -1 : 1;
-          })
+          });
           this.favoriteMovies.forEach(movie => {
-            if(movie.backdropPath != "null") {
-              movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
-            }
-          })
+            this.allMovies.push(movie);
+          });
+          response.data.forEach(movie => {
+              if(movie.rank === 0) {
+                movie.rank = "Unranked";
+                this.allMovies.push(movie);
+              }
+          });
         })
       }
     },
@@ -240,17 +256,27 @@ export default {
     movieService.getFavorites().then(response => {
       const size = response.data.length > 10 ? 10 : response.data.length;
       console.log(response.data.length)
+      response.data.forEach(movie => {
+        if(movie.backdropPath != "null") {
+           movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
+        }
+      })
+      
       this.favoriteMovies = response.data.filter(movie => {
           return movie.rank != 0;
       });
       this.favoriteMovies.sort((a, b) => {
         return a.rank < b.rank && a.rank != 0 ? -1 : 1;
-      })
+      });
       this.favoriteMovies.forEach(movie => {
-        if(movie.backdropPath != "null") {
-           movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
-        }
-      })
+        this.allMovies.push(movie);
+      });
+      response.data.forEach(movie => {
+          if(movie.rank === 0) {
+            movie.rank = "Unranked";
+            this.allMovies.push(movie);
+          }
+      });
       console.log(this.favoriteMovies)
     })
   }
@@ -387,5 +413,10 @@ b-button {
 }
 .modal-backdrop {
   background-color: transparent;
+}
+.modal-movie-info {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Paytone One', sans-serif;
 }
 </style>

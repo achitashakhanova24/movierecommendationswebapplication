@@ -144,19 +144,41 @@ export default {
       });
     },
       updateRank(movieId, rank) {
+        if(rank === "Unranked"){         
+          rank = 0;
+        }
         movieService.updateRank(movieId, rank).then(response => {
+          console.log(response.data)
           this.favoriteMovies = response.data.filter(movie => {
-              return movie.rank != 0;
+          return movie.rank != 0;
+          });
+          let unranked = response.data.filter(movie => {
+              return movie.rank === 0;
           });
           this.favoriteMovies.sort((a, b) => {
-            return a.rank < b.rank && a.rank != 0 ? -1 : 1;
+            return (a.rank < b.rank && a.rank != 0) ? -1 : 1;
+          })
+          unranked.forEach(movie => {
+            movie.rank = "Unranked";
+            this.favoriteMovies.push(movie);
           })
           this.favoriteMovies.forEach(movie => {
             if(movie.backdropPath != "null") {
               movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
             }
           })
+          movieService.getMovie(movieId).then(response => {
+          console.log(response.data);
+          this.movie = response.data;
+          if(this.movie.rank === 0) {
+            this.movie.rank = "Unranked"
+          }
+          if(this.movie.posterPath != "null") {
+            this.movie.posterPath = "https://image.tmdb.org/t/p/w500/" + this.movie.posterPath;
+          }
         })
+        });
+        
       },
       setTargetFavorite(movieId) {
         this.targetFavorite = movieId;

@@ -292,7 +292,60 @@ public class MovieService {
         return movies;
     }
 
+    public List<MovieDto> getRecommendations(List<Integer> movieIds) {
+        List<MovieDto> movies = new ArrayList<>();
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode;
+        int size = movieIds.size() >= 10 ? 10 : movieIds.size();
+        for(int i = 0; i <= size; i++) {
+            ResponseEntity<String> responseEntity = restTemplate.exchange(MOVIE_API + "/movie/" + movieIds.get(i) + "/recommendations" + "?api_key=" + KEY, HttpMethod.GET, entity, String.class);
 
+            try {
+                jsonNode = mapper.readTree(responseEntity.getBody()).path("results");
+                movies.addAll(mapNodeArrayToDto(jsonNode));
+
+            } catch (JsonMappingException e) {
+                e.printStackTrace();
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return movies;
+    }
+
+    public List<MovieDto> mapNodeArrayToDto(JsonNode jsonNode) {
+        List<MovieDto> movies = new ArrayList<>();
+        int size = jsonNode.size() > 10 ? 10 : jsonNode.size();
+        for (int i = 0; i < size; i++){
+            MovieDto movie = new MovieDto();
+            movie.setTitle(jsonNode.get(i).path("original_title").asText());
+            movie.setLanguage(jsonNode.get(i).path("original_language").asText());
+
+            JsonNode array = jsonNode.get(i).path("genre_ids");
+            String genreList = "";
+            for (int j = 0; j < array.size(); j++){
+                int genre = array.get(j).asInt();
+                if(j == (array.size()-1)){
+                    genreList += genreIdToName.get(genre);
+                }
+                else {
+                    genreList += genreIdToName.get(genre) + ", ";
+                }
+            }
+            movie.setGenres(genreList);
+            String release = jsonNode.get(i).path("release_date").asText().equals("") ? "Unreleased" : jsonNode.get(i).path("release_date").asText().substring(5,10) + "-" + jsonNode.get(i).path("release_date").asText().substring(0,4);
+            movie.setReleaseDate(release);
+            movie.setDescription(jsonNode.get(i).path("overview").asText());
+            movie.setMovieId(jsonNode.get(i).path("id").asInt());
+            movie.setPosterPath(jsonNode.get(i).path("poster_path").asText());
+            movie.setBackdropPath(jsonNode.get(i).path("backdrop_path").asText());
+            movie.setRating(jsonNode.get(i).path("vote_average").asDouble());
+            movies.add(movie);
+        }
+        return movies;
+    }
 
     public List<MovieTableDto> mapResultSetToDto(JsonNode jsonNode){
         List<MovieTableDto> movies = new ArrayList<>();

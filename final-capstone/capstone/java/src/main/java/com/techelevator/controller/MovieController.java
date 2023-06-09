@@ -94,4 +94,9 @@ public class MovieController {
     public ResponseEntity<List <MovieDto>> updateRank(@PathVariable int movieId, @PathVariable int rank, Principal principal){
         return new ResponseEntity<>(movieDao.updateRank(movieId, rank, principal.getName()), HttpStatus.OK);
     }
+
+    @GetMapping("/recommendations")
+    public ResponseEntity<List<MovieDto>> getRecommendations(Principal principal) {
+        return new ResponseEntity<>(movieDao.getRecommendations(principal.getName()), HttpStatus.OK);
+    }
 }

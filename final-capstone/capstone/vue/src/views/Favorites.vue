@@ -86,7 +86,7 @@ export default {
                     movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
                 }
                 if(movie.rank === 0) {
-                    movie.rank = " Unranked";
+                    movie.rank = "Unranked";
                 }
             })
             console.log(this.favoriteMovies)
@@ -117,18 +117,32 @@ export default {
         })
       },
       updateRank(movieId, rank) {
+          if(rank === "Unranked"){         
+          rank = 0;
+        }
         movieService.updateRank(movieId, rank).then(response => {
-          this.favoriteMovies = response.data.filter(movie => {
-              return movie.rank != 0;
-          });
-          this.favoriteMovies.sort((a, b) => {
-            return a.rank < b.rank && a.rank != 0 ? -1 : 1;
-          })
-          this.favoriteMovies.forEach(movie => {
-            if(movie.backdropPath != "null") {
-              movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
-            }
-          })
+          this.favoriteMovies = response.data;
+            let rankedMovies = response.data.filter(movie => {
+                return movie.rank != 0;
+            })
+            let unrankedMovies = response.data.filter(movie => {
+                return movie.rank === 0;
+            })
+            rankedMovies.sort((a, b) => {
+                return a.rank < b.rank ? -1 : 1;
+            })
+            this.favoriteMovies = rankedMovies;
+            unrankedMovies.forEach(movie => {
+                this.favoriteMovies.push(movie);
+            })
+            this.favoriteMovies.forEach(movie => {
+                if(movie.backdropPath != "null") {
+                    movie.backdropPath = "https://image.tmdb.org/t/p/w780/" + movie.backdropPath;
+                }
+                if(movie.rank === 0) {
+                    movie.rank = "Unranked";
+                }
+            })
         })
       },
       setTargetFavorite(movieId) {

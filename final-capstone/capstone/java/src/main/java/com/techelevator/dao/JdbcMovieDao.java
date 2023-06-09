@@ -287,6 +287,29 @@ public class JdbcMovieDao implements MovieDao{
         }
     }
 
+    @Override
+    public List<MovieDto> getRecommendations(String username) {
+        String sql = "SELECT * FROM favorites " +
+                "JOIN users ON users.user_id = favorites.user_id " +
+                "WHERE users.username = ?";
+        List<MovieDto> favoriteMovies = new ArrayList<>();
+
+        try {
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, username);
+            List<Integer> idsList = new ArrayList<>();
+            while (rowSet.next()) {
+                idsList.add(rowSet.getInt("movie_id"));
+            }
+            return movieService.getRecommendations(idsList);
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new CannotGetJdbcConnectionException("Could not connect to data source");
+        } catch (BadSqlGrammarException e) {
+            throw new BadSqlGrammarException(e.getMessage(), sql, e.getSQLException());
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException(e.getMessage());
+        }
+    }
+
 
     private void fixRanks(String username, int index) {
         String unrankedSql = "SELECT * FROM favorites " +

@@ -23,4 +23,5 @@ public interface MovieDao {
     List<MovieDto> getSeenList(String username);
 
     List<MovieDto> updateRank(int movieId, int rank, String username);
+    List<MovieDto> getRecommendations(String username);
 }
